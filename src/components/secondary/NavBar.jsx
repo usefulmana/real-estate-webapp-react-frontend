@@ -45,6 +45,9 @@ nav{
   color:white !important;
   font-weight: 500;
 }
+.register:hover{
+  transform: scale(1.05)
+}
 .register{
   background-color: #DF2B2B;
 }
