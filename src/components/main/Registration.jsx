@@ -1,6 +1,6 @@
-import React, { Component } from 'react'
-import styled from 'styled-components'
-
+import React, { Component } from "react";
+import styled from "styled-components";
+import { Link } from "react-router-dom";
 export default class Registration extends Component {
   render() {
     return (
@@ -9,39 +9,87 @@ export default class Registration extends Component {
           <div className="col-sm-9 col-md-7 col-lg-4 mx-auto">
             <div className="card card-signin my-5">
               <div className="card-body">
+                <div className="text-center top-icon">
+                  <Link to="/">
+                    <i className="navbar-brand fas fa-home"> HOMELY</i>
+                  </Link>
+                </div>
                 <h5 className="card-title text-center">Registration</h5>
                 <form action="#" className="form-signin">
                   <div className="form-label-group">
-                    <input type="name" id="inputName" className="form-control" placeholder="Name" required />
+                    <input
+                      type="name"
+                      id="inputName"
+                      className="form-control"
+                      placeholder="Name"
+                      required
+                    />
                   </div>
 
                   <div className="form-label-group">
-                    <input type="email" id="inputEmail" className="form-control" placeholder="Email address" required/>
+                    <input
+                      type="email"
+                      id="inputEmail"
+                      className="form-control"
+                      placeholder="Email address"
+                      required
+                    />
                   </div>
 
                   <div className="form-label-group">
-                    <input type="phone" id="inputPhone" className="form-control" placeholder="Phone #" required />
+                    <input
+                      type="phone"
+                      id="inputPhone"
+                      className="form-control"
+                      placeholder="Phone #"
+                      required
+                    />
                   </div>
 
                   <div className="form-label-group">
-                    <input type="password" id="inputPassword" className="form-control" placeholder="Password" required />
+                    <input
+                      type="password"
+                      id="inputPassword"
+                      className="form-control"
+                      placeholder="Password"
+                      required
+                    />
                   </div>
 
                   <div className="form-label-group">
-                    <input type="password" id="inputRetypePassword" className="form-control" placeholder="Retype Password" required />
+                    <input
+                      type="password"
+                      id="inputRetypePassword"
+                      className="form-control"
+                      placeholder="Retype Password"
+                      required
+                    />
                   </div>
 
-                  <button className="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Sign up</button>
+                  <button
+                    className="btn btn-lg btn-primary btn-block text-uppercase"
+                    type="submit"
+                  >
+                    Sign up
+                  </button>
                 </form>
               </div>
             </div>
           </div>
         </div>
       </LoginWrapper>
-    )
+    );
   }
 }
 const LoginWrapper = styled.div`
+.top-icon i:hover{
+    transform:scale(1.1)
+  }
+.top-icon i{
+    color: #f93838 !important;
+    font-size: 25px;
+    margin-bottom: 1rem;
+  }
 .card-signin {
   border: 0;
   border-radius: 1rem;
@@ -84,4 +132,4 @@ const LoginWrapper = styled.div`
   background:#F93838 !important;
 }import NavBar from '../secondary/NavBar';
 
-`
+`;
