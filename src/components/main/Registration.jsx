@@ -2,6 +2,21 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 export default class Registration extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      userName: '',
+      userEmail: '',
+      userPhone: '',
+      userPassword: '',
+      userPasswordError:'',
+      userPhoneError:''
+    }
+    this.onChange = this.onChange.bind(this)
+  }
+  onChange(e) {
+    this.setState({ [e.target.name]: e.target.value });
+  }
   render() {
     return (
       <LoginWrapper>
@@ -20,6 +35,8 @@ export default class Registration extends Component {
                     <input
                       type="name"
                       id="inputName"
+                      name="name"
+                      onChange={this.onChange}
                       className="form-control"
                       placeholder="Name"
                       required
@@ -30,6 +47,8 @@ export default class Registration extends Component {
                     <input
                       type="email"
                       id="inputEmail"
+                      name="email"
+                      onChange={this.onChange}
                       className="form-control"
                       placeholder="Email address"
                       required
@@ -40,6 +59,8 @@ export default class Registration extends Component {
                     <input
                       type="phone"
                       id="inputPhone"
+                      name="phone"
+                      onChange={this.onChange}
                       className="form-control"
                       placeholder="Phone #"
                       required
@@ -50,6 +71,8 @@ export default class Registration extends Component {
                     <input
                       type="password"
                       id="inputPassword"
+                      name="password"
+                      onChange={this.onChange}
                       className="form-control"
                       placeholder="Password"
                       required

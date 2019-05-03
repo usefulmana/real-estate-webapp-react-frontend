@@ -6,7 +6,7 @@ export default class Banner extends Component {
   render() {
     return (
       <BannerWrapper>
-          <img src={BannerPhoto} alt="Banner Photo" />
+          <img src={BannerPhoto} alt="Banner" />
           <div className="centered">
           <h1>Home Reimagined</h1>
           <p className="text-center">We'll help you find a place you'll love </p>
