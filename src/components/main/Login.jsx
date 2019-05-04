@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import {connect} from "react-redux"
+import Swal from 'sweetalert2'
 export default class Login extends Component {
   render() {
     return (

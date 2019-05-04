@@ -1,7 +1,10 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-export default class Registration extends Component {
+import {connect} from 'react-redux'
+import {register} from '../../actions/authActions'
+
+class Registration extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -9,15 +12,62 @@ export default class Registration extends Component {
       userEmail: '',
       userPhone: '',
       userPassword: '',
+      userPassword2:'',
+      userErrors:'',
       userPasswordError:'',
-      userPhoneError:''
     }
     this.onChange = this.onChange.bind(this)
+    this.onSubmit = this.onSubmit.bind(this)
+  }
+  componentDidUpdate(prevProps) {
+    const {error} = this.props
+    if (error !== prevProps.error){
+      if(error.id ==='REGISTER_FAIL'){
+        this.setState({ userErrors: error.msg.msg})
+      }else{
+        this.setState({ userErrors:''})
+      }
+    }
   }
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
   }
-  render() {
+  onSubmit(e){
+    e.preventDefault()
+    const isValid = this.validate()
+    if(isValid){
+      this.setState({
+        userEmailError: '',
+        userPasswordError: '',
+        userPhoneError: '',
+        userDuplicateEmailError:'',
+      })
+      const newUser = {
+        name: this.state.userName,
+        email: this.state.userEmail,
+        password: this.state.userPassword,
+        phone: this.state.userPhone
+      }
+      this.props.register(newUser)
+    }
+  }
+
+  validate = () => {
+
+    let userPasswordError = ''
+
+    if (this.state.userPassword !== this.state.userPassword2 || this.state.userPassword.length <6 || this.state.userPassword2 <6) {
+      userPasswordError = 'Error! Passwords do not match or have less than 6 characters. Please try again! '
+    }
+    if (userPasswordError){
+      
+      this.setState({ userPasswordError})
+      return false;
+    }
+    return true;
+  }
+
+    render() {
     return (
       <LoginWrapper>
         <div className="row">
@@ -30,15 +80,19 @@ export default class Registration extends Component {
                   </Link>
                 </div>
                 <h5 className="card-title text-center">Registration</h5>
-                <form action="#" className="form-signin">
+              
+                {this.state.userErrors ? (
+                  <div className='boxed text-center'> {this.state.userErrors}</div>
+                ):null}
+                <form onSubmit={this.onSubmit} className="form-signin">
                   <div className="form-label-group">
                     <input
                       type="name"
                       id="inputName"
-                      name="name"
+                      name="userName"
                       onChange={this.onChange}
                       className="form-control"
-                      placeholder="Name"
+                      placeholder="Name*"
                       required
                     />
                   </div>
@@ -47,23 +101,21 @@ export default class Registration extends Component {
                     <input
                       type="email"
                       id="inputEmail"
-                      name="email"
+                      name="userEmail"
                       onChange={this.onChange}
                       className="form-control"
-                      placeholder="Email address"
+                      placeholder="Email address*"
                       required
                     />
                   </div>
-
                   <div className="form-label-group">
                     <input
                       type="phone"
                       id="inputPhone"
-                      name="phone"
+                      name="userPhone"
                       onChange={this.onChange}
                       className="form-control"
                       placeholder="Phone #"
-                      required
                     />
                   </div>
 
@@ -71,12 +123,15 @@ export default class Registration extends Component {
                     <input
                       type="password"
                       id="inputPassword"
-                      name="password"
+                      name="userPassword"
                       onChange={this.onChange}
                       className="form-control"
-                      placeholder="Password"
+                      placeholder="Password*"
                       required
                     />
+                  </div>
+                  <div style={{ fontSize: 12, color: "red" }}>
+                    {this.state.userPasswordError}
                   </div>
 
                   <div className="form-label-group">
@@ -84,11 +139,18 @@ export default class Registration extends Component {
                       type="password"
                       id="inputRetypePassword"
                       className="form-control"
-                      placeholder="Retype Password"
+                      name = "userPassword2"
+                      onChange={this.onChange}
+                      placeholder="Retype Password*"
                       required
                     />
                   </div>
-
+                  <div style={{ fontSize: 12, color: "red" }}>
+                    {this.state.userPasswordError}
+                  </div>
+                  <div style={{ fontSize: 12}} className="mb-2 text-muted">
+                    * Required fields
+                  </div>
                   <button
                     className="btn btn-lg btn-primary btn-block text-uppercase"
                     type="submit"
@@ -105,9 +167,15 @@ export default class Registration extends Component {
   }
 }
 const LoginWrapper = styled.div`
+
 .top-icon i:hover{
     transform:scale(1.1)
   }
+.boxed {
+  border-radius:2rem;
+  background:rgb(249,56,56,0.7);
+  margin-bottom: 1rem;
+} 
 .top-icon i{
     color: #f93838 !important;
     font-size: 25px;
@@ -153,6 +221,11 @@ const LoginWrapper = styled.div`
 }
 .btn-danger{
   background:#F93838 !important;
-}import NavBar from '../secondary/NavBar';
+}
 
 `;
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated,
+  error: state.error
+})
+export default connect(mapStateToProps,{register})(Registration)
