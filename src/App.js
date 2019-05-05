@@ -10,8 +10,6 @@ import ProjectManager from './components/main/ProjectManager';
 import NewPropertyForm from './components/secondary/NewPropertyForm';
 import NewProjectForm from './components/secondary/NewProjectForm';
 import Default from './components/main/Default';
-import Login from './components/main/Login';
-import Registration from './components/main/Registration';
 import { Provider } from 'react-redux';
 import store from './store';
 import Dashboard from './components/main/Dashboard';
@@ -36,8 +34,6 @@ class App extends Component {
             <Route exact path="/newProperty" component={NewPropertyForm} />
             <Route exact path="/newProject" component={NewProjectForm} />
             <Route exact path="/dashboard" component={Dashboard} />
-            <Route exact path="/login" component={Login} />
-            <Route exact path="/register" component={Registration} />
             <Route exact path="/test" component={Test} />
             <Route component={Default} />
           </Switch>

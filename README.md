@@ -16,9 +16,11 @@ Repository: [Github](https://github.com/usefulmana/real-estate-webapp-react-fron
 
 |  Email | Password  |
 |---|---|
-|   |   |
-|   |   |
-|   |   |
+| rmit@gmail.com  |  123456 |
+| rmit1@gmail.com  | 123456  |
+| rmit2@gmail.com | 123456  |
+| rmit3@gmail.com | 123456  |
+| rmit4@gmail.com | 123456  |
 
 ### API Endpoints <br>
 

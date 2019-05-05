@@ -1,81 +1,140 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import {connect} from "react-redux"
-import Swal from 'sweetalert2'
-export default class Login extends Component {
+import { connect } from "react-redux"
+import {
+  Button,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  Form,
+  FormGroup,
+  Input,
+  NavLink,
+  Alert
+} from 'reactstrap';
+import { login } from '../../actions/authActions'
+import { clearErrors } from '../../actions/errorActions';
+
+class Login extends Component {
+  state = {
+    modal: false,
+    email: '',
+    password: '',
+    msg: null
+  }
+
+  componentDidUpdate(prevProps) {
+    const { error, isAuthenticated } = this.props;
+    if (error !== prevProps.error) {
+      // Check for register error
+      if (error.id === 'LOGIN_FAIL') {
+        this.setState({ msg: error.msg.msg });
+      } else {
+        this.setState({ msg: null });
+      }
+    }
+
+    // If authenticated, close modal
+    if (this.state.modal) {
+      if (isAuthenticated) {
+        this.toggle();
+      }
+    }
+  }
+
+  toggle = () => {
+    // Clear errors
+    this.props.clearErrors();
+    this.setState({
+      modal: !this.state.modal
+    });
+  };
+
+
+  onChange = e => {
+    this.setState({ [e.target.name]: e.target.value });
+  };
+
+  onSubmit = e => {
+    e.preventDefault();
+    const { email, password } = this.state;
+    const user = {
+      email,
+      password
+    };
+    // Attempt to login
+    this.props.login(user);
+  };
   render() {
     return (
       <LoginWrapper>
-        <div className="row">
-          <div className="col-sm-9 col-md-7 col-lg-4 mx-auto">
-            <div className="card card-signin my-5">
-              <div className="card-body">
-                <div className="text-center top-icon">
-                  <Link to="/">
-                    <i className="navbar-brand fas fa-home"> HOMELY</i>
-                  </Link>
-                </div>
-                <h5 className="card-title text-center">Sign In</h5>
-                <form action="#" className="form-signin">
-                  <div className="form-label-group">
-                    <input
-                      type="email"
-                      id="inputEmail"
-                      className="form-control"
-                      placeholder="Email address"
-                      required
-                      autoFocus
-                    />
-                  </div>
-
-                  <div className="form-label-group">
-                    <input
-                      type="password"
-                      id="inputPassword"
-                      className="form-control"
-                      placeholder="Password"
-                      required
-                    />
-                  </div>
-
-                  <button
-                    className="btn btn-lg btn-primary btn-block text-uppercase"
-                    type="submit"
-                  >
-                    Sign in
-                  </button>
-                  <hr class="my-4" />
-                  <p className="text-center">Have not registered yet?</p>
-                  <Link to="/register">
-                    <button
-                      className="btn btn-lg btn-danger btn-block text-uppercase"
-                      type="button"
-                    >
-                      Sign up
-                    </button>
-                  </Link>
-                </form>
-              </div>
+        <NavLink className="btn btn-link" onClick={this.toggle}>
+          LOG IN
+        </NavLink>
+        <Modal
+          isOpen={this.state.modal}
+          toggle={this.toggle}
+        >
+          <ModalHeader toggle={this.toggle} className="mx-auto">
+            SIGN IN
+              </ModalHeader>
+          <ModalBody>
+            <div className="text-center top-icon">
+              <Link to="/">
+                <i className="navbar-brand fas fa-home"> HOMELY</i>
+              </Link>
             </div>
-          </div>
-        </div>
+            {this.state.msg? (
+              <Alert> {this.state.msg}</Alert>
+            ) : null}
+            <Form onSubmit={this.onSubmit}>
+              <FormGroup>
+                <Input
+                  type="email"
+                  id="inputEmail"
+                  className="mb-3 mt-2"
+                  placeholder="Email address"
+                  name='email'
+                  required
+                  onChange={this.onChange}
+                />
+                <Input
+                  type="password"
+                  id="inputPassword"
+                  name='password'
+                  className="mb-3"
+                  placeholder="Password"
+                  onChange={this.onChange}
+                />
+                <Button
+                  color="primary"
+                  block
+                >
+                  Sign in
+                  </Button>
+              </FormGroup>
+            </Form>
+          </ModalBody>
+
+        </Modal>
       </LoginWrapper>
     );
   }
 }
 const LoginWrapper = styled.div`
-  .top-icon i{
-    color: #f93838 !important;
-    font-size: 25px;
-    margin-bottom: 1rem;
-  }
-  .top-icon i:hover{
-    transform:scale(1.1)
-  }
+.btn-lg{
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+.btn-link{
+  display: inline-block
+}
+.btn-link:hover{
+  transform: scale(1.1)
+}
   .card-signin {
     border: 0;
-    border-radius: 1rem;
     box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
   }
 
@@ -115,3 +174,12 @@ const LoginWrapper = styled.div`
     background: #f93838 !important;
   }
 `;
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated,
+  error: state.error
+});
+
+export default connect(
+  mapStateToProps,
+  { login, clearErrors }
+)(Login);

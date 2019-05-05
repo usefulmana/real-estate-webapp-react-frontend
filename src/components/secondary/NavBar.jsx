@@ -1,9 +1,47 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-
-export default class NavBar extends Component {
+import {connect} from 'react-redux'
+import Registration from '../main/Registration'
+import Login from '../main/Login'
+import Logout from '../main/Logout'
+class NavBar extends Component {
+  state = {
+    isOpen: false
+  }
+  toggle = () => {
+    this.setState({
+      isOpen: !this.state.isOpen
+    });
+  };
   render() {
+    const { isAuthenticated, user } = this.props.auth;
+
+    const authLinks = ( 
+      <Fragment>
+        <div className="nav-item ml-auto">
+            <span className='navbar-text mr-3 '>
+              <strong>{user ? `Welcome, ${user.name}!` : ''}</strong>
+            </span>
+        </div>
+        <div className="nav-item">
+          <Logout/>
+        </div>
+      </Fragment>
+      )
+    
+    const guestLinks = (
+      <Fragment>
+        <div className="nav-item ml-auto">
+          <Login />
+        </div>
+        <div className="nav-item">
+          <Registration />
+        </div>
+      </Fragment>
+    );
+
+
     return (
       <NavBarWrapper>
         <div>
@@ -26,18 +64,7 @@ export default class NavBar extends Component {
               className="collapse navbar-collapse"
               id="navbarSupportedContentLG"
             >
-              <ul className="navbar-nav ml-auto">
-                <li className="nav-item">
-                  <Link to="/login">
-                    <button className="btn btn-link"> LOG IN</button>
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link to="/register">
-                    <button className="btn register"> REGISTER</button>
-                  </Link>
-                </li>
-              </ul>
+                {isAuthenticated ? authLinks : guestLinks}
             </div>
           </nav>
         </div>
@@ -53,11 +80,14 @@ const NavBarWrapper = styled.div`
   .btn {
     color: white !important;
     font-weight: 500;
-  }
-  .register:hover {
-    transform: scale(1.05);
-  }
-  .register {
-    background-color: #df2b2b;
+
   }
 `;
+const mapStateToProps = state => ({
+  auth: state.auth
+});
+
+export default connect(
+  mapStateToProps,
+  null
+)(NavBar);
