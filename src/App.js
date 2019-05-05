@@ -7,8 +7,8 @@ import PropertyDetail from './components/main/PropertyDetail';
 import ProjectDetail from './components/main/ProjectDetail';
 import PropertyManager from './components/main/PropertyManager';
 import ProjectManager from './components/main/ProjectManager';
-import NewPropertyForm from './components/secondary/NewPropertyForm';
-import NewProjectForm from './components/secondary/NewProjectForm';
+import PropertyForm from './components/secondary/PropertyForm';
+import ProjectForm from './components/secondary/ProjectForm';
 import Default from './components/main/Default';
 import { Provider } from 'react-redux';
 import store from './store';
@@ -31,8 +31,8 @@ class App extends Component {
             <Route path="/projectDetails/:id" component={ProjectDetail} />
             <Route exact path="/propertyManager" component={PropertyManager} />
             <Route exact path="/projectManager" component={ProjectManager} />
-            <Route exact path="/newProperty" component={NewPropertyForm} />
-            <Route exact path="/newProject" component={NewProjectForm} />
+            <Route exact path="/newProperty" component={PropertyForm} />
+            <Route exact path="/newProject" component={ProjectForm} />
             <Route exact path="/dashboard" component={Dashboard} />
             <Route exact path="/test" component={Test} />
             <Route component={Default} />
