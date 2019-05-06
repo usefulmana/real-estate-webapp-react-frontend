@@ -48,7 +48,7 @@ class PropertyManager extends Component {
         <td>{p.area}</td>
         <td>
           <Button outline color="primary" size='sm' data-toggle="tooltip" title="Edit"><i class="far fa-edit"></i></Button> {'     '}
-          <Button outline color="info" size='sm' data-toggle="tooltip" title="View all properties belong to this project"><i class="fas fa-info-circle"></i></Button> {'     '}
+          <Button outline color="info" size='sm' data-toggle="tooltip" title="Details"><i class="fas fa-info-circle"></i></Button> {'     '}
           <Button outline color="danger" size='sm' data-toggle="tooltip" title="Delete" onClick={this.handleDelete.bind(this, p._id)}>
             <i class="far fa-trash-alt"></i>
           </Button>
@@ -59,7 +59,7 @@ class PropertyManager extends Component {
       <Fragment>
         <div>
           <div className='text-right'>
-            {/* <PropertyForm /> */}
+             <PropertyForm />
           </div>
           <Table className='text-center'>
             <thead>

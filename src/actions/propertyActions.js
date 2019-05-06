@@ -44,10 +44,12 @@ export function getPropertiesByProjectID(id) {
       );
   };
 }
-export const createProperty = propertyData => dispatch => {
+export const createProperty = (propertyData, token) => dispatch => {
+  console.log(propertyData, token);
   fetch('http://localhost:3000/property', {
     method: 'POST',
     headers: {
+      'x-auth-token': token,
       'Content-Type': 'Application/json'
     },
     body: JSON.stringify(propertyData)
