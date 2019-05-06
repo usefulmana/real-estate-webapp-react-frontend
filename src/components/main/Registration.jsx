@@ -99,7 +99,7 @@ class Registration extends Component {
     return (
       <LoginWrapper>
         <Button outline color='danger' className="btn-link" onClick={this.toggle}>
-          REGISTER
+          <strong>REGISTER</strong>
         </Button>
         <Modal isOpen={this.state.modal} toggle={this.toggle}>
           <ModalHeader toggle={this.toggle} className="mx-auto">

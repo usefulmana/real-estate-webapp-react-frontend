@@ -42,16 +42,14 @@ class Login extends Component {
       }
     }
   }
-
   toggle = () => {
     // Clear errors
     this.props.clearErrors();
     this.setState({
       modal: !this.state.modal
     });
+
   };
-
-
   onChange = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
@@ -70,7 +68,7 @@ class Login extends Component {
     return (
       <LoginWrapper>
         <NavLink className="btn btn-link" onClick={this.toggle}>
-          LOG IN
+          <strong>LOGIN</strong>
         </NavLink>
         <Modal
           isOpen={this.state.modal}

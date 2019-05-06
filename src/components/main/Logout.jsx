@@ -9,7 +9,7 @@ class Logout extends Component {
       <Fragment>
       <LogoutWrapper>
           <Button outline color='danger' onClick={this.props.logout}>
-            LOGOUT
+            <strong>LOGOUT</strong>
         </Button>
       </LogoutWrapper>
       </Fragment>

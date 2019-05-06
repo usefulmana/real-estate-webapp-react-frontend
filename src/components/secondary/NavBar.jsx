@@ -5,6 +5,7 @@ import {connect} from 'react-redux'
 import Registration from '../main/Registration'
 import Login from '../main/Login'
 import Logout from '../main/Logout'
+import SearchBar from './SearchBar'
 class NavBar extends Component {
   state = {
     isOpen: false
@@ -23,6 +24,11 @@ class NavBar extends Component {
             <span className='navbar-text mr-3 '>
               <strong>{user ? `Welcome, ${user.name}!` : ''}</strong>
             </span>
+        </div>
+        <div>
+        <Link to = '/dashboard'>
+            <button className="btn-link btn"><strong>DASHBOARD</strong></button>
+        </Link>
         </div>
         <div className="nav-item">
           <Logout/>
@@ -45,10 +51,17 @@ class NavBar extends Component {
     return (
       <NavBarWrapper>
         <div>
-          <nav className="navbar navbar-expand-lg navbar-dark">
+          <nav className="navbar navbar-expand-lg navbar-dark fixed-top">
             <Link to="/">
               <i className="navbar-brand fas fa-home"> HOMELY</i>
             </Link>
+            <form className="form-inline">
+                  <input className="form-control" type="search" placeholder="Address, City, Province" name="search" id="search"/>
+                  <span className="input-group-append"><button class="btn btn-search my-2 my-sm-0 " type="submit">
+                    <i class="fa fa-search"></i>
+                  </button>
+              </span>     
+            </form>
             <button
               className="navbar-toggler"
               type="button"
@@ -74,12 +87,36 @@ class NavBar extends Component {
 }
 
 const NavBarWrapper = styled.div`
+strong{
+
+}
+input:placeholder-shown {
+    border-color: purple;
+    text-overflow: ellipsis;
+}
+.form-inline{
+  width: 57%;
+  display: flex;
+  justify-content: left;
+}
+.form-inline input{
+  border: none;
+  max-height: 32px;
+  background:#FB6A6A;
+  height: auto;
+  border-radius: 2rem;
+}
+
+.form-inline #search{
+  width: 30%;
+}
+
   nav {
     background: #f93838;
   }
   .btn {
     color: white !important;
-    font-weight: 500;
+    font-weight: 5;
 
   }
 `;

@@ -1,12 +1,101 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import {Link} from 'react-router-dom'
-export default class NewPropertyForm extends Component {
+import {connect} from 'react-redux'
+import { clearErrors } from '../../actions/errorActions'
+import {createProperty} from '../../actions/propertyActions'
+import Swal from 'sweetalert2'
+import {
+  Button,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  Form,
+  FormGroup,
+  Input,
+  Alert
+} from 'reactstrap';
 
-  handleChange = name => event => {
-    this.setState({ [name]: event.target.value });
+class PropertyForm extends Component {
+
+  constructor(props){
+    super(props)
+    this.state ={
+      modal : false,
+      propertyTitle: '',
+      propertyPrice:'',
+      propertyArea:'',
+      bedroom:'',
+      bathroom:'',
+      direction:'',
+      address:'',
+      city:'',
+      province:'',
+      imageURLs:[],
+      project:'',
+      user:''
+    }
+    this.onChange = this.onChange.bind(this)
+    this.onSubmit = this.onSubmit.bind(this)
+  }
+  componentDidMount() {
+    fetch('http://localhost:3000/auth/user', {
+      headers: {
+        'x-auth-token': `${this.props.auth.token}`
+      }
+    }).then(res => res.json()).then(json => this.setState({ user: json._id }));
+  }
+  onChange(e) {
+    this.setState({ [e.target.name]: e.target.value });
+  }
+  toggle = () => {
+    // Clear errors
+    this.props.clearErrors();
+    this.setState({
+      modal: !this.state.modal
+    });
   };
-  
+  onSubmit(e) {
+    e.preventDefault()
+    // const isValid = this.validate()
+      const property = {
+        title: this.state.propertyTitle,
+        price: this.state.propertyPrice,
+        area: this.state.propertyArea,
+        totalArea: this.state.projectArea,
+        numOfBedrooms: this.state.bedroom,
+        numOfBathrooms: this.state.bathroom,
+        direction: this.state.direction,
+        address: this.state.address,
+        city: this.state.city,
+        province: this.state.province,
+        project: this.state.project,
+        user: this.state.user
+      }
+    this.props.createProperty(property, this.props.auth.token)
+      Swal.fire({
+        type: "success",
+        title: "Success!",
+        showConfirmButton: false,
+        timer: 500
+      });
+      setTimeout(window.location.reload(), 5000)
+    
+  }
+
+  // validate = () => {
+  //   let projectAreaError = ''
+
+  //   if (!this.state.projectArea || this.state.projectArea <= 0) {
+  //     projectAreaError = 'This field cannot be blank. Total area cannot be negative or equal to 0!'
+  //   }
+  //   if (projectAreaError) {
+  //     this.setState({ projectAreaError })
+  //     return false;
+  //   }
+  //   return true;
+  // }
+
   render() {
     return (
       <NewPropertyFormWrapper>
@@ -111,3 +200,7 @@ const NewPropertyFormWrapper = styled.div`
     background: #f93838 !important;
   }
 `
+const mapStateToProps = state => ({
+  auth: state.auth
+})
+export default connect(mapStateToProps, { createProperty, clearErrors })(PropertyForm)

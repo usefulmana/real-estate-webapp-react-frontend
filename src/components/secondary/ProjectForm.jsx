@@ -1,46 +1,63 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import Swal from "sweetalert2";
-import {createProject} from '../../actions/projectActions'
-import {connect} from 'react-redux'
-import store from '../../store'
-import NavBar from './NavBar';
+import { createProject } from '../../actions/projectActions'
+import {clearErrors} from '../../actions/errorActions'
+import { connect } from 'react-redux'
+import {
+  Button,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  Form,
+  FormGroup,
+  Input,
+  Alert
+} from 'reactstrap';
+
 class NewProjectForm extends Component {
 
-  constructor(props){
+  constructor(props) {
     super(props)
     this.state = {
-      projectName:'',
-      projectOwner:'',
-      projectArea:'',
-      projectType:'',
-      projectStartYear:'',
-      projectEndYear:'',
-      projectAreaError:'',
-      user:''
+      modal: false,
+      projectID:'',
+      projectName: '',
+      projectOwner: '',
+      projectArea: '',
+      projectType: '',
+      projectStartYear: '',
+      projectEndYear: '',
+      projectAreaError: '',
+      user: '',
+      msg: null
     }
     this.onChange = this.onChange.bind(this)
     this.onSubmit = this.onSubmit.bind(this)
   }
   componentDidMount() {
-    const reduxState = store.getState();
-    const authToken = reduxState.auth.token;
     fetch('http://localhost:3000/auth/user', {
       headers: {
-        'x-auth-token': `${authToken}`
+        'x-auth-token': `${this.props.auth.token}`
       }
     }).then(res => res.json()).then(json => this.setState({ user: json._id }));
   }
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
   }
-  onSubmit(e){
+  toggle = () => {
+    // Clear errors
+    this.props.clearErrors();
+    this.setState({
+      modal: !this.state.modal
+    });
+  };
+  onSubmit(e) {
     e.preventDefault()
     const isValid = this.validate()
 
-    if(isValid){
-      console.log("Valid!")
+    if (isValid) {
       this.setState({
         projectAreaError: ''
       })
@@ -54,24 +71,25 @@ class NewProjectForm extends Component {
         endYear: this.state.projectEndYear,
         user: this.state.user
       }
-      this.props.createProject(project)
+      this.props.createProject(project, this.props.auth.token)
       Swal.fire({
         type: "success",
         title: "Success!",
         showConfirmButton: false,
-        timer: 2000
+        timer: 500
       });
+      setTimeout(window.location.reload(),5000)
     }
   }
 
   validate = () => {
     let projectAreaError = ''
 
-    if(!this.state.projectArea || this.state.projectArea <=0){
+    if (!this.state.projectArea || this.state.projectArea <= 0) {
       projectAreaError = 'This field cannot be blank. Total area cannot be negative or equal to 0!'
     }
-    if (projectAreaError){
-      this.setState({projectAreaError})
+    if (projectAreaError) {
+      this.setState({ projectAreaError })
       return false;
     }
     return true;
@@ -94,113 +112,105 @@ class NewProjectForm extends Component {
     const yearListFuture = futureYears.map((x) => { return (<option key={x}>{x}</option>) });
     return (
       <NewProjectFormWrapper>
-      <NavBar/>
-        <div className="row">
-          <div className="col-sm-9 col-md-7 col-lg-4 mx-auto">
-            <div className="card card-signin my-5">
-              <div className="card-body">
-                <div className="text-center top-icon">
-                  <Link to="/">
-                    <i className="navbar-brand fas fa-home"> HOMELY</i>
-                  </Link>
-                </div>
-                <h5 className="card-title text-center">New Project</h5>
-                <form onSubmit={this.onSubmit} className="form-signin">
-                  <div className="form-label-group">
-                    <input
-                      type="name"
-                      id="inputName"
-                      name="projectName"
-                      className="form-control"
-                      placeholder="Project Name"
-                      onChange={this.onChange}
-                      required
-                      autoFocus
-                    />
-                  </div>
-
-                  <div className="form-label-group">
-                    <input
-                      type="owner"
-                      id="inputOwner"
-                      name="projectOwner"
-                      className="form-control"
-                      placeholder="Project Owner"
-                      onChange={this.onChange}
-                      required
-                    />
-                  </div>
-
-                  <div className="form-label-group">
-                    <input
-                      type="text"
-                      id="inputArea"
-                      name="projectArea"
-                      className="form-control"
-                      placeholder="Total Area in square meter"
-                      onChange={this.onChange}
-                      required
-                    />
-                  </div>
-                  <div style={{ fontSize: 12, color: "red" }}>
-                    {this.state.projectAreaError}
-                  </div>
-
-                  <div className="form-label-group">
-                    <select
-                      id="inputType"
-                      name="projectType"
-                      className="form-control my-select custom-select"
-                      placeholder="Project Type"
-                      onChange={this.onChange}
-                      required
-                    >
-                    <option value="" selected disabled>Project Type</option>
-                    <option value="House">House</option>
-                    <option value="Land">Land</option>
-                    <option value="Apartment">Apartment</option>
-                    </select>
-                  </div>
-
-                  <div className="form-label-group">
-                    <select
-                      id="inputType"
-                      name="projectStartYear"
-                      className="form-control my-select custom-select"
-                      placeholder="Project Type"
-                      onChange={this.onChange}
-                      required
-                    >
-                      <option value="" selected disabled>Start Year</option>
-                      {yearListPast}
-                    </select>
-                  </div>
-
-                  <div className="form-label-group">
-                    <select
-                      id="inputType"
-                      name="projectEndYear"
-                      className="form-control my-select custom-select"
-                      placeholder="Project Type"
-                      onChange={this.onChange}
-                      required
-                    >
-                      <option value="" selected disabled>End Year</option>
-                      {yearListFuture}
-                    </select>
-                  </div>
-
-                  <button
-                    className="btn btn-lg btn-primary btn-block text-uppercase"
-                    type="submit"
-                  >
-                    Submit
-                  </button>
-                </form>
-              </div>
+        <Button className="mb-3 add-new-button" outline color='success' onClick={this.toggle}>ADD NEW PROJECT</Button>
+        <Modal isOpen={this.state.modal}
+          toggle={this.toggle}>
+          <ModalHeader toggle={this.toggle} className="mx-auto">
+            PROJECT FORM
+          </ModalHeader>
+          <ModalBody>
+            <div className="text-center top-icon">
+              <Link to="/">
+                <i className="navbar-brand fas fa-home"> HOMELY</i>
+              </Link>
             </div>
-          </div>
-        </div>
+            {this.state.msg ? (
+              <Alert> {this.state.msg}</Alert>
+            ) : null}
+            <Form onSubmit={this.onSubmit} className="form-signin">
+              <FormGroup>
+                <Input
+                  type="name"
+                  id="inputName"
+                  name="projectName"
+                  className=" mb-3 mt-2"
+                  placeholder="Project Name"
+                  onChange={this.onChange}
+                  required
+                  autoFocus
+                />
+                <Input
+                  type="owner"
+                  id="inputOwner"
+                  name="projectOwner"
+                  className="mb-3"
+                  placeholder="Project Owner"
+                  onChange={this.onChange}
+                  required
+                />
+                <Input
+                  type="number"
+                  id="inputArea"
+                  name="projectArea"
+                  className="mb-3"
+                  min="1"
+                  placeholder="Total Area in square meter"
+                  onChange={this.onChange}
+                  required
+                />
+
+                <div style={{ fontSize: 12, color: "red" }}>
+                  {this.state.projectAreaError}
+                </div>
+
+                <Input
+                  type="select"
+                  id="inputType"
+                  name="projectType"
+                  className="custom-select mb-3"
+                  placeholder="Project Type"
+                  onChange={this.onChange}
+                  required
+                >
+                  <option value="" selected disabled>Project Type</option>
+                  <option value="House">House</option>
+                  <option value="Land">Land</option>
+                  <option value="Apartment">Apartment</option>
+                </Input>
+                <Input
+                  type="select"
+                  id="inputType"
+                  name="projectStartYear"
+                  className="custom-select mb-3"
+                  placeholder="Project Type"
+                  onChange={this.onChange}
+                  required
+                >
+                  <option value="" selected disabled>Start Year</option>
+                  {yearListPast}
+                </Input>
+                <Input
+                  type="select"
+                  id="inputType"
+                  name="projectEndYear"
+                  className="custom-select mb-3"
+                  placeholder="Project Type"
+                  onChange={this.onChange}
+                  required
+                >
+                  <option value="" selected disabled>End Year</option>
+                  {yearListFuture}
+                </Input>
+                <button
+                  className="btn btn-lg btn-primary btn-block text-uppercase"
+                  type="submit"
+                >
+                  Submit
+                  </button>
+              </FormGroup>     
+            </Form>
+          </ModalBody>
+        </Modal>
       </NewProjectFormWrapper>
     )
   }
@@ -259,5 +269,7 @@ const NewProjectFormWrapper = styled.div`
   .btn-danger {
     background: #f93838 !important;
   } `
-
-  export default connect(null, {createProject})(NewProjectForm)
+const mapStateToProps = state => ({
+  auth: state.auth
+})
+export default connect(mapStateToProps, { createProject, clearErrors })(NewProjectForm)
