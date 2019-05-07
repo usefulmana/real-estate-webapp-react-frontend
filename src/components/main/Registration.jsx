@@ -27,6 +27,7 @@ class Registration extends Component {
       userPassword2: '',
       userErrors: '',
       userPasswordError: '',
+      imageURL:'',
       modal: false
     }
     this.onSubmit = this.onSubmit.bind(this)
@@ -74,7 +75,8 @@ class Registration extends Component {
         name: this.state.userName,
         email: this.state.userEmail,
         password: this.state.userPassword,
-        phone: this.state.userPhone
+        phone: this.state.userPhone,
+        avatar: this.state.imageURL
       }
       this.props.register(newUser)
     }
@@ -145,7 +147,13 @@ class Registration extends Component {
                   className="mb-3"
                   placeholder="Phone #*"
                 />
-
+                <Input
+                  type="url"
+                  name="imageURL"
+                  onChange={this.onChange}
+                  className="mb-3"
+                  placeholder="Avatar Link"
+                />
                 <Input
                   type="password"
                   id="userPassword"

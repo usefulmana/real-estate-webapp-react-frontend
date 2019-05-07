@@ -10,7 +10,6 @@ class UserCard extends Component {
     super();
     this.state = {
       user: "",
-      avatar: ""
     };
   }
 
@@ -25,16 +24,10 @@ class UserCard extends Component {
       }
     })
       .then(res => res.json())
-      .then(user => this.setState({ user: user }));
-    if (!this.state.user.avatar) {
-      this.setState({
-        avatar: "https://avatars0.githubusercontent.com/u/42512663?s=400&v=4"
-      });
-    }
+      .then(user => this.setState({ user: user}));
   }
   render() {
     const { isAuthenticated } = this.props.auth;
-    console.log(this.state.user.avatar);
     const authLinks = (
       <Fragment>
         <div>
@@ -42,8 +35,8 @@ class UserCard extends Component {
             <CardImg
               top
               width="80%"
-              src={this.state.avatar}
-              alt="Card image cap"
+              src={this.state.user.avatar}
+              alt='avatar'
             />
 
             <CardBody className="text-center">
@@ -67,7 +60,7 @@ class UserCard extends Component {
             </CardBody>
           </Card>
           <div className="text-center mt-4">
-            <EditUserInfo/>
+            <EditUserInfo />
           </div>
         </div>
       </Fragment>
@@ -80,9 +73,10 @@ class UserCard extends Component {
 }
 
 const UserCardWrapper = styled.div`
-.icon{
-  margin-right: 1rem;
-}`;
+  .icon {
+    margin-right: 1rem;
+  }
+`;
 const mapStateToProps = state => ({
   auth: state.auth
 });
