@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
-import { connect } from "react-redux"
+import { Link, Redirect } from "react-router-dom";
+import { connect } from "react-redux";
+import Swal from "sweetalert2";
 import {
   Button,
   Modal,
@@ -12,23 +13,24 @@ import {
   Input,
   NavLink,
   Alert
-} from 'reactstrap';
-import { login } from '../../actions/authActions'
-import { clearErrors } from '../../actions/errorActions';
+} from "reactstrap";
+import { login } from "../../actions/authActions";
+import { clearErrors } from "../../actions/errorActions";
 
 class Login extends Component {
   state = {
     modal: false,
-    email: '',
-    password: '',
-    msg: null
-  }
+    email: "",
+    password: "",
+    msg: null,
+    redirectToNewPage: false
+  };
 
   componentDidUpdate(prevProps) {
     const { error, isAuthenticated } = this.props;
     if (error !== prevProps.error) {
       // Check for register error
-      if (error.id === 'LOGIN_FAIL') {
+      if (error.id === "LOGIN_FAIL") {
         this.setState({ msg: error.msg.msg });
       } else {
         this.setState({ msg: null });
@@ -48,7 +50,6 @@ class Login extends Component {
     this.setState({
       modal: !this.state.modal
     });
-
   };
   onChange = e => {
     this.setState({ [e.target.name]: e.target.value });
@@ -63,6 +64,12 @@ class Login extends Component {
     };
     // Attempt to login
     this.props.login(user);
+    Swal.fire({
+      type: "success",
+      title: "Success!",
+      showConfirmButton: false,
+      timer: 500
+    });
   };
   render() {
     return (
@@ -70,22 +77,17 @@ class Login extends Component {
         <NavLink className="btn btn-link" onClick={this.toggle}>
           <strong>LOGIN</strong>
         </NavLink>
-        <Modal
-          isOpen={this.state.modal}
-          toggle={this.toggle}
-        >
+        <Modal isOpen={this.state.modal} toggle={this.toggle}>
           <ModalHeader toggle={this.toggle} className="mx-auto">
             SIGN IN
-              </ModalHeader>
+          </ModalHeader>
           <ModalBody>
             <div className="text-center top-icon">
               <Link to="/">
                 <i className="navbar-brand fas fa-home"> HOMELY</i>
               </Link>
             </div>
-            {this.state.msg? (
-              <Alert> {this.state.msg}</Alert>
-            ) : null}
+            {this.state.msg ? <Alert> {this.state.msg}</Alert> : null}
             <Form onSubmit={this.onSubmit}>
               <FormGroup>
                 <Input
@@ -93,44 +95,40 @@ class Login extends Component {
                   id="inputEmail"
                   className="mb-3 mt-2"
                   placeholder="Email address"
-                  name='email'
+                  name="email"
                   required
                   onChange={this.onChange}
                 />
                 <Input
                   type="password"
                   id="inputPassword"
-                  name='password'
+                  name="password"
                   className="mb-3"
                   placeholder="Password"
                   onChange={this.onChange}
                 />
-                <Button
-                  color="primary"
-                  block
-                >
+                <Button color="primary" block>
                   Sign in
-                  </Button>
+                </Button>
               </FormGroup>
             </Form>
           </ModalBody>
-
         </Modal>
       </LoginWrapper>
     );
   }
 }
 const LoginWrapper = styled.div`
-.btn-lg{
-  margin-top: 2rem;
-  margin-bottom: 2rem;
-}
-.btn-link{
-  display: inline-block
-}
-.btn-link:hover{
-  transform: scale(1.1)
-}
+  .btn-lg {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
+  .btn-link {
+    display: inline-block;
+  }
+  .btn-link:hover {
+    transform: scale(1.1);
+  }
   .card-signin {
     border: 0;
     box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);

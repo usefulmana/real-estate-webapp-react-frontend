@@ -8,7 +8,9 @@ import {
   LOGIN_FAIL,
   LOGOUT_SUCCESS,
   REGISTER_SUCCESS,
-  REGISTER_FAIL
+  REGISTER_FAIL,
+  UPDATE_SUCCESS,
+  UPDATE_FAIL
 } from './types';
 
 // Check token & load user
@@ -57,6 +59,35 @@ export const register = ({ name, email, phone, password }) => dispatch => {
       );
       dispatch({
         type: REGISTER_FAIL
+      });
+    });
+};
+
+export const updateInfo = ({ name, email, phone, password, token, id }) => dispatch => {
+  // headers
+  const config = {
+    'x-auth-token': token,
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  };
+
+  const body = JSON.stringify({ name, email, phone, password });
+
+  axios
+    .put(`http://localhost:3000/user/${id}`, body, config)
+    .then(res =>
+      dispatch({
+        type: UPDATE_SUCCESS,
+        payload: res.data
+      })
+    )
+    .catch(err => {
+      dispatch(
+        returnErrors(err.response.data, err.response.status, 'UPDATE_FAIL')
+      );
+      dispatch({
+        type: UPDATE_FAIL
       });
     });
 };

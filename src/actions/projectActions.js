@@ -9,6 +9,7 @@ import {
 import axios from 'axios';
 import { returnErrors } from './errorActions';
 
+
 export function getProjects() {
   return function(dispatch) {
     fetch('http://localhost:3000/project')

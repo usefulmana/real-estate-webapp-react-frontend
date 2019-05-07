@@ -4,6 +4,7 @@ import NavBar from '../secondary/NavBar';
 import PropertyManager from './PropertyManager';
 import ProjectManager from './ProjectManager';
 import Footer  from '../secondary/Footer'
+import UserCard from '../secondary/UserCard';
 export default class Dashboard extends Component {
   render() {
     return (
@@ -12,17 +13,7 @@ export default class Dashboard extends Component {
         <div>
            <div className="row tab">
              <div className="col-3">
-              <div className="card">
-                <img src="https://s.zillowstatic.com/homepage/static/Buy_a_home.png" className="card-img-top" alt="Buy a house" />
-                <div className="card-block">
-                  <h4 className="card-title text-center text-bold">Buy a Home</h4>
-                  <p className="card-text text-center">Find your place with an immersive photo experience and the most listings, including
-                                things you won't find anywhere else.</p>
-                  <div className="text-center">
-                    <button className="btn">Search Properties</button>
-                  </div>
-                </div>
-              </div>
+              <UserCard/>
              </div>
             <div className="col-9">
               <ul class="nav nav-tabs ">
