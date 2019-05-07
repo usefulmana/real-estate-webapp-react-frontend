@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import {getProjectsByUserID, deleteProject} from '../../actions/projectActions'
 import Swal from 'sweetalert2'
 import ProjectForm from '../secondary/ProjectForm';
+import EditProject from '../secondary/EditProject';
 
 
 
@@ -48,7 +49,7 @@ class ProjectManager extends Component {
         <td>{p.type}</td>
         <td>{p.totalArea}</td>
         <td>
-          <Button outline color="primary" size='sm' data-toggle="tooltip" title="Edit"><i class="far fa-edit"></i></Button> {'     '}
+          <div className="d-inline-block"><EditProject project={p}/></div>{'     '}
           <Button outline color="info" size='sm' data-toggle="tooltip" title="View all properties belong to this project"><i class="fas fa-info-circle"></i></Button> {'     '}
           <Button outline color="danger" size='sm' data-toggle="tooltip" title="Delete" onClick={this.handleDelete.bind(this, p._id)}>
             <i class="far fa-trash-alt"></i>

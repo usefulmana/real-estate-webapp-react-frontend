@@ -44,20 +44,20 @@ class UserCard extends Component {
               <CardText>
                 <p className="text-muted">
                   <span className="icon">
-                    <i class="fas fa-envelope" />
+                    <i class="fas fa-envelope" title='Email Address'/>
                   </span>
                   {this.state.user.email}
                 </p>
                 <p className="text-muted">
                   <span className="icon">
-                    <i className="fas fa-phone" />
+                    <i className="fas fa-phone" title='Phone #' />
                   </span>
                   {"    "}
                   {this.state.user.phone}
                 </p>
                 <p className="text-muted">
                   <span className="icon">
-                    <i class="far fa-calendar-alt"></i>
+                    <i class="far fa-calendar-alt" title='Joined Date'></i>
                   </span>
                   {"    "}
                   {this.state.user.registerDate}

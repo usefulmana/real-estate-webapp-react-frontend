@@ -9,7 +9,6 @@ import {
 import axios from 'axios';
 import { returnErrors } from './errorActions';
 
-
 export function getProjects() {
   return function(dispatch) {
     fetch('http://localhost:3000/project')
@@ -45,7 +44,7 @@ export const createProject = (projectData, token) => dispatch => {
     }
   };
   const body = JSON.stringify(projectData);
-  axios.post('http://localhost:3000/project', body,config).then(res =>
+  axios.post('http://localhost:3000/project', body, config).then(res =>
     dispatch({
       type: ADD_PROJECT,
       payload: res.data
@@ -70,20 +69,37 @@ export const deleteProject = (pid, uid) => dispatch => {
     )
     .catch(err => console.log(err));
 };
-export const updateProject = (pid, uid) => dispatch => {
+export const updateProject = ({
+  name,
+  owner,
+  type,
+  totalArea,
+  startYear,
+  endYear,
+  token,
+  id
+}) => dispatch => {
   const config = {
-    method: 'put',
     headers: {
-      'x-auth-token': uid
+      'x-auth-token': token,
+      'Content-Type': 'application/json'
     }
   };
-  fetch(`http://localhost:3000/project/${pid}`, config)
-    .then(res => res.json())
-    .then(project =>
+  const body = JSON.stringify({
+    name,
+    owner,
+    type,
+    totalArea,
+    startYear,
+    endYear
+  });
+  axios.put(`http://localhost:3000/project/${id}`, body, config)
+    .then(res =>
       dispatch({
-        type:UPDATE_PROJECT,
-        payload: project
+        type: UPDATE_PROJECT,
+        payload: res.data
       })
     )
     .catch(err => console.log(err));
+  console.log('here');
 };

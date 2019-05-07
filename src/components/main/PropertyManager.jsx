@@ -5,7 +5,8 @@ import {connect} from 'react-redux'
 import { getPropertiesByUserID, deleteProperty } from '../../actions/propertyActions'
 import Swal from 'sweetalert2'
 import PropertyForm from '../secondary/PropertyForm';
-
+import EditProperty from '../secondary/EditProperty';
+import {Link} from 'react-router-dom'
 
 class PropertyManager extends Component {
   constructor() {
@@ -47,8 +48,8 @@ class PropertyManager extends Component {
         <td>{p.price}</td>
         <td>{p.area}</td>
         <td>
-          <Button outline color="primary" size='sm' data-toggle="tooltip" title="Edit"><i class="far fa-edit"></i></Button> {'     '}
-          <Button outline color="info" size='sm' data-toggle="tooltip" title="Details"><i class="fas fa-info-circle"></i></Button> {'     '}
+          <div className='d-inline-block'><EditProperty property={p}/></div>{'     '}
+          <Link to={`/propertyDetails/${p._id}`}> <Button outline color="info" size='sm' data-toggle="tooltip" title="Details"><i class="fas fa-info-circle"></i></Button> {'     '}</Link>
           <Button outline color="danger" size='sm' data-toggle="tooltip" title="Delete" onClick={this.handleDelete.bind(this, p._id)}>
             <i class="far fa-trash-alt"></i>
           </Button>

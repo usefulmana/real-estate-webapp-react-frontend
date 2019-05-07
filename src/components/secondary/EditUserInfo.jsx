@@ -11,6 +11,7 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { updateInfo } from "../../actions/authActions";
 import { clearErrors } from "../../actions/errorActions";
+import Swal from 'sweetalert2'
 class EditUserInfo extends Component {
   constructor() {
     super();
@@ -85,8 +86,14 @@ class EditUserInfo extends Component {
         token: this.props.auth.token,
         id: this.state.userID
       };
-      console.log(existingUser)
       this.props.updateInfo(existingUser);
+      Swal.fire({
+        type: "success",
+        title: "Success!",
+        showConfirmButton: false,
+        timer: 500
+      });
+      setTimeout(window.location.reload(), 5000)
     }
   }
 
@@ -120,9 +127,10 @@ class EditUserInfo extends Component {
               <Input
                 type="name"
                 name="userName"
+                value = {this.state.userName}
                 onChange={this.onChange}
                 className="mb-3 mt-2"
-                placeholder={this.state.user.name}
+                placeholder='Name*'
                 required
               />
               <Input
@@ -130,24 +138,28 @@ class EditUserInfo extends Component {
                 id="userEmail"
                 name="userEmail"
                 onChange={this.onChange}
-               placeholder={this.state.user.email}
+                value={this.state.userEmail}
                 className="mb-3"
+                placeholder ='Email*'
                 required
               />
               <Input
                 type="phone"
                 id="userPhone"
                 name="userPhone"
-                placeholder={this.state.user.phone}
+                value={this.state.userPhone}
                 onChange={this.onChange}
                 className="mb-3"
+                placeholder='Phone #*'
+                required
               />
               <Input
                 type="url"
                 name="imageURL"
                 onChange={this.onChange}
                 className="mb-3"
-                placeholder={this.state.user.avatar}
+                value={this.state.imageURL}
+                placeholder='Avatar Link'
               />
               {/* <Input
                 type="password"
@@ -173,12 +185,12 @@ class EditUserInfo extends Component {
                 placeholder="Retype Password*"
                 required
               /> */}
+              <div className='text-muted mb-2 text-left'>
+                * Required fields
+              </div>
               <div style={{ fontSize: 12, color: "red" }}>
                 {this.state.userPasswordError}
               </div>
-              <div style={{ fontSize: 12 }} className="mb-2 text-muted">
-                * Required fields
-                </div>
               {this.state.userErrors ? (
                 <Alert> {this.state.userErrors}</Alert>
               ) : null}

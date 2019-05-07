@@ -6,7 +6,7 @@ import {
   DELETE_PROPERTY,
   UPDATE_PROPERTY
 } from './types';
-
+import axios from 'axios'
 export function getProperties() {
   return function(dispatch) {
     console.log('property');
@@ -45,7 +45,6 @@ export function getPropertiesByProjectID(id) {
   };
 }
 export const createProperty = (propertyData, token) => dispatch => {
-  console.log(propertyData, token);
   fetch('http://localhost:3000/property', {
     method: 'POST',
     headers: {
@@ -79,19 +78,20 @@ export const deleteProperty = (pid, uid) => dispatch => {
     )
     .catch(err => console.log(err));
 };
-export const updateProject = (pid, uid) => dispatch => {
+export const updateProperty = ({propertyData},token,id) => dispatch => {
   const config = {
-    method: 'put',
     headers: {
-      'x-auth-token': uid
+      'x-auth-token': token,
+      'Content-type': 'application/json'
     }
   };
-  fetch(`http://localhost:3000/property/${pid}`, config)
-    .then(res => res.json())
-    .then(property =>
+  const body = JSON.stringify({propertyData})
+  axios
+    .put(`http://localhost:3000/property/${id}`,body, config)
+    .then(res =>
       dispatch({
         type: UPDATE_PROPERTY,
-        payload: property
+        payload: res.data
       })
     )
     .catch(err => console.log(err));

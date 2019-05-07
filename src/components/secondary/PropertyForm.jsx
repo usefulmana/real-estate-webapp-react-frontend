@@ -85,7 +85,7 @@ class PropertyForm extends Component {
         showConfirmButton: false,
         timer: 500
       });
-      setTimeout(window.location.reload(), 5000)
+      // setTimeout(window.location.reload(), 5000)
     }
     else {
       this.props.createProperty(property, this.props.auth.token)
@@ -95,7 +95,7 @@ class PropertyForm extends Component {
         showConfirmButton: false,
         timer: 500
       });
-      setTimeout(window.location.reload(), 5000)
+      // setTimeout(window.location.reload(), 5000)
     }
   }
 
