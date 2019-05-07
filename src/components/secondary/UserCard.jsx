@@ -2,7 +2,6 @@ import React, { Component, Fragment } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import { Card, CardImg, CardText, CardBody, Button } from "reactstrap";
-import Image from "react-image-resizer";
 import EditUserInfo from "./EditUserInfo";
 
 class UserCard extends Component {
@@ -34,7 +33,7 @@ class UserCard extends Component {
           <Card>
             <CardImg
               top
-              width="80%"
+              width="50%"
               src={this.state.user.avatar}
               alt='avatar'
             />
@@ -55,6 +54,13 @@ class UserCard extends Component {
                   </span>
                   {"    "}
                   {this.state.user.phone}
+                </p>
+                <p className="text-muted">
+                  <span className="icon">
+                    <i class="far fa-calendar-alt"></i>
+                  </span>
+                  {"    "}
+                  {this.state.user.registerDate}
                 </p>
               </CardText>
             </CardBody>

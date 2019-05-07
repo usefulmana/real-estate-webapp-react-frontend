@@ -2,9 +2,6 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import {
   Button,
-  Modal,
-  ModalHeader,
-  ModalBody,
   Form,
   FormGroup,
   Input,
@@ -18,10 +15,13 @@ class EditUserInfo extends Component {
   constructor() {
     super();
     this.state = {
+      userID:'',
+      user:[],
       userName: "",
       userEmail: "",
       userPhone: "",
       userPassword: "",
+      imageURL:"",
       userPassword2: "",
       userErrors: "",
       userPasswordError: "",
@@ -41,20 +41,29 @@ class EditUserInfo extends Component {
         this.setState({ userErrors: "" });
       }
     }
-    if (this.state.modal) {
-      if (isAuthenticated) {
-        this.toggle();
-      }
-    }
+  }
+  componentDidMount() {
+    this.fetchUser();
   }
 
-  toggle = () => {
-    // Clear errors
-    this.props.clearErrors();
+  fetchUser() {
+    fetch("http://localhost:3000/auth/user", {
+      headers: {
+        "x-auth-token": this.props.auth.token
+      }
+    })
+      .then(res => res.json())
+      .then(user => this.setState({ user: user }));
+  }
+  handleEdit(id, name, email, phone, avatar) {
     this.setState({
-      modal: !this.state.modal
+      userID: id,
+      userName: name,
+      userEmail: email,
+      userPhone: phone,
+      imageURL: avatar
     });
-  };
+  }
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
   }
@@ -68,120 +77,117 @@ class EditUserInfo extends Component {
         userPhoneError: "",
         userDuplicateEmailError: ""
       });
-      const newUser = {
+      const existingUser = {
         name: this.state.userName,
         email: this.state.userEmail,
-        password: this.state.userPassword,
         phone: this.state.userPhone,
-        token: this.props.auth.token
+        avatar: this.state.imageURL,
+        token: this.props.auth.token,
+        id: this.state.userID
       };
-      this.props.updateInfo(newUser);
+      console.log(existingUser)
+      this.props.updateInfo(existingUser);
     }
   }
 
   validate = () => {
-    let userPasswordError = "";
+    // let userPasswordError = "";
 
-    if (
-      this.state.userPassword !== this.state.userPassword2 ||
-      this.state.userPassword.length < 6 ||
-      this.state.userPassword2 < 6
-    ) {
-      userPasswordError =
-        "Error! Passwords do not match or have less than 6 characters. Please try again! ";
-    }
-    if (userPasswordError) {
-      this.setState({ userPasswordError });
-      return false;
-    }
+    // if (
+    //   this.state.userPassword !== this.state.userPassword2 ||
+    //   this.state.userPassword.length < 6 ||
+    //   this.state.userPassword2 < 6
+    // ) {
+    //   userPasswordError =
+    //     "Error! Passwords do not match or have less than 6 characters. Please try again! ";
+    // }
+    // if (userPasswordError) {
+    //   this.setState({ userPasswordError });
+    //   return false;
+    // }
     return true;
   };
 
   render() {
     return (
       <LoginWrapper>
-        <Button className="mb-3 add-new-button" outline color='success' onClick={this.toggle}>EDIT PROFILE</Button>
-        <Modal isOpen={this.state.modal} toggle={this.toggle}>
-          <ModalHeader toggle={this.toggle} className="mx-auto">
-            <h4 className="mx-auto">Update Profile</h4>
-          </ModalHeader>
-          <ModalBody>
-            <div className="text-center top-icon">
-              <Link to="/">
-                <i className="navbar-brand fas fa-home"> HOMELY</i>
-              </Link>
-            </div>
-            {this.state.userErrors ? (
-              <Alert> {this.state.userErrors}</Alert>
-            ) : null}
-            <Form onSubmit={this.onSubmit}>
-              <FormGroup>
-                <Input
-                  type="name"
-                  id="userName"
-                  name="userName"
-                  onChange={this.onChange}
-                  
-                  className="mb-3 mt-2"
-                  placeholder="Name*"
-                  required
-                />
-
-                <Input
-                  type="email"
-                  id="userEmail"
-                  name="userEmail"
-                  onChange={this.onChange}
-                  className="mb-3"
-                  placeholder="Email address*"
-                  required
-                />
-
-                <Input
-                  type="phone"
-                  id="userPhone"
-                  name="userPhone"
-                  onChange={this.onChange}
-                  className="mb-3"
-                  placeholder="Phone #*"
-                />
-
-                <Input
-                  type="password"
-                  id="userPassword"
-                  name="userPassword"
-                  onChange={this.onChange}
-                  className="mb-3"
-                  placeholder="Password*"
-                  required
-                />
-
-                <div style={{ fontSize: 12, color: "red" }}>
-                  {this.state.userPasswordError}
+        <Button className="mb-3 add-new-button" outline color='success' 
+          onClick={this.handleEdit.bind(this, this.state.user._id, this.state.user.name, this.state.user.email,this.state.user.phone, this.state.user.avatar)} 
+        data-toggle="collapse" data-target="#demo">EDIT PROFILE</Button>
+        <div id="demo" class="collapse">
+          <Form onSubmit={this.onSubmit}>
+            <FormGroup>
+              <Input
+                type="name"
+                name="userName"
+                onChange={this.onChange}
+                className="mb-3 mt-2"
+                placeholder={this.state.user.name}
+                required
+              />
+              <Input
+                type="email"
+                id="userEmail"
+                name="userEmail"
+                onChange={this.onChange}
+               placeholder={this.state.user.email}
+                className="mb-3"
+                required
+              />
+              <Input
+                type="phone"
+                id="userPhone"
+                name="userPhone"
+                placeholder={this.state.user.phone}
+                onChange={this.onChange}
+                className="mb-3"
+              />
+              <Input
+                type="url"
+                name="imageURL"
+                onChange={this.onChange}
+                className="mb-3"
+                placeholder={this.state.user.avatar}
+              />
+              {/* <Input
+                type="password"
+                id="userPassword"
+                name="userPassword"
+                value={this.state.user.password}
+                onChange={this.onChange}
+                className="mb-3"
+                placeholder="Password*"
+                required
+              />
+              <div style={{ fontSize: 12, color: "red" }}>
+                {this.state.userPasswordError}
+              </div>
+              
+              <Input
+                type="password"
+                id="userPassword2"
+                className="mb-3"
+                name="userPassword2"
+                value={this.state.user.password}
+                onChange={this.onChange}
+                placeholder="Retype Password*"
+                required
+              /> */}
+              <div style={{ fontSize: 12, color: "red" }}>
+                {this.state.userPasswordError}
+              </div>
+              <div style={{ fontSize: 12 }} className="mb-2 text-muted">
+                * Required fields
                 </div>
-
-                <Input
-                  type="password"
-                  id="userPassword2"
-                  className="mb-3"
-                  name="userPassword2"
-                  onChange={this.onChange}
-                  placeholder="Retype Password*"
-                  required
-                />
-                <div style={{ fontSize: 12, color: "red" }}>
-                  {this.state.userPasswordError}
-                </div>
-                <div style={{ fontSize: 12 }} className="mb-2 text-muted">
-                  * Required fields
-                </div>
-                <Button color="primary" block>
-                  Sign up
+              {this.state.userErrors ? (
+                <Alert> {this.state.userErrors}</Alert>
+              ) : null}
+              <Button color="primary" block>
+                SUBMIT
                 </Button>
-              </FormGroup>
-            </Form>
-          </ModalBody>
-        </Modal>
+            </FormGroup>
+          </Form>
+        </div>
       </LoginWrapper>
     );
   }
@@ -257,7 +263,8 @@ const LoginWrapper = styled.div`
 `;
 const mapStateToProps = state => ({
   isAuthenticated: state.auth.isAuthenticated,
-  error: state.error
+  error: state.error,
+  auth: state.auth
 });
 export default connect(
   mapStateToProps,

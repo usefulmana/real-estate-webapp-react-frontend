@@ -17,7 +17,6 @@ import {
 
 export const loadUser = () => (dispatch, getState) => {
   dispatch({ type: USER_LOADING });
-
   axios
     .get('http://localhost:3000/auth/user', tokenConfig(getState))
     .then(res =>
@@ -34,8 +33,13 @@ export const loadUser = () => (dispatch, getState) => {
     });
 };
 // Register
-
-export const register = ({ name, email, phone, password,avatar }) => dispatch => {
+export const register = ({
+  name,
+  email,
+  phone,
+  password,
+  avatar
+}) => dispatch => {
   // headers
   const config = {
     headers: {
@@ -63,16 +67,23 @@ export const register = ({ name, email, phone, password,avatar }) => dispatch =>
     });
 };
 
-export const updateInfo = ({ name, email, phone, password, token, id }) => dispatch => {
+export const updateInfo = ({
+  name,
+  email,
+  phone,
+  avatar,
+  token,
+  id
+}) => dispatch => {
   // headers
   const config = {
-    'x-auth-token': token,
     headers: {
+      'x-auth-token': token,
       'Content-Type': 'application/json'
     }
   };
 
-  const body = JSON.stringify({ name, email, phone, password });
+  const body = JSON.stringify({ name, email, phone, avatar});
 
   axios
     .put(`http://localhost:3000/user/${id}`, body, config)
