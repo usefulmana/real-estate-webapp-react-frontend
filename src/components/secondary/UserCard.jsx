@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
-import { Card, CardImg, CardText, CardBody, Button } from "reactstrap";
+import { Card, CardImg, CardText, CardBody} from "reactstrap";
 import EditUserInfo from "./EditUserInfo";
 
 class UserCard extends Component {

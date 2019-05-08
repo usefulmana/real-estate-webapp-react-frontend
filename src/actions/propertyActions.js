@@ -3,10 +3,11 @@ import {
   ADD_PROPERTY,
   GET_PROPERTIES_BY_USER_ID,
   GET_PROPERTIES_BY_PROJECT_ID,
+  GET_PROPERTY_BY_ID,
   DELETE_PROPERTY,
   UPDATE_PROPERTY
 } from './types';
-import axios from 'axios'
+import axios from 'axios';
 export function getProperties() {
   return function(dispatch) {
     console.log('property');
@@ -28,6 +29,18 @@ export function getPropertiesByUserID(id) {
         dispatch({
           type: GET_PROPERTIES_BY_USER_ID,
           payload: properties.filter(p => p.user === id)
+        })
+      );
+  };
+}
+export function getPropertiesByID(id) {
+  return function(dispatch) {
+    fetch(`http://localhost:3000/property/byId/${id}`)
+      .then(res => res.json())
+      .then(property=>
+        dispatch({
+          type: GET_PROPERTY_BY_ID,
+          payload: property
         })
       );
   };
@@ -78,16 +91,40 @@ export const deleteProperty = (pid, uid) => dispatch => {
     )
     .catch(err => console.log(err));
 };
-export const updateProperty = ({propertyData},token,id) => dispatch => {
+export const updateProperty = (
+ { title,
+  price,
+  area,
+  numOfBedrooms,
+  numOfBathrooms,
+  direction,
+  address,
+  city,
+  province,
+  project,
+  token,
+  id}
+) => dispatch => {
   const config = {
     headers: {
       'x-auth-token': token,
       'Content-type': 'application/json'
     }
   };
-  const body = JSON.stringify({propertyData})
+  const body = JSON.stringify({
+    title,
+    price,
+    area,
+    numOfBedrooms,
+    numOfBathrooms,
+    direction,
+    address,
+    city,
+    province,
+    project
+  });
   axios
-    .put(`http://localhost:3000/property/${id}`,body, config)
+    .put(`http://localhost:3000/property/${id}`, body, config)
     .then(res =>
       dispatch({
         type: UPDATE_PROPERTY,

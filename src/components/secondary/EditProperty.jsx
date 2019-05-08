@@ -37,7 +37,9 @@ class EditProperty extends Component {
             province: '',
             imageURLs: [],
             project: '',
-            user: ''
+            user: '',
+            id:'',
+            token:''
         }
         this.onChange = this.onChange.bind(this)
         this.onSubmit = this.onSubmit.bind(this)
@@ -98,12 +100,13 @@ class EditProperty extends Component {
             address: this.state.address,
             city: this.state.city,
             province: this.state.province,
-            project: this.state.project
+            token: this.props.auth.token,
+            id: this.state.propertyID
         }
-        console.log(property)
         if (this.state.project) {
             property.project = this.state.project
-            this.props.updateProperty(property, this.props.auth.token, this.props.property._id)
+            console.log(property)
+            this.props.updateProperty(property)
             this.setState({ project: '' })
             Swal.fire({
                 type: "success",
@@ -111,7 +114,7 @@ class EditProperty extends Component {
                 showConfirmButton: false,
                 timer: 500
             });
-            // setTimeout(window.location.reload(), 5000)
+            setTimeout(window.location.reload(), 5000)
         }
         else {
             this.props.updateProperty(property, this.props.auth.token, this.props.property._id)
@@ -121,7 +124,7 @@ class EditProperty extends Component {
                 showConfirmButton: false,
                 timer: 500
             });
-            // setTimeout(window.location.reload(), 5000)
+            setTimeout(window.location.reload(), 5000)
         }
     }
 

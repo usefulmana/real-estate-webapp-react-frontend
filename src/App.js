@@ -1,5 +1,5 @@
 import React, { Fragment, Component } from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, withRouter } from 'react-router-dom';
 import './App.css';
 import Home from './components/main/Home';
 import SearchResults from './components/main/SearchResults';
@@ -14,6 +14,7 @@ import { Provider } from 'react-redux';
 import store from './store';
 import Dashboard from './components/main/Dashboard';
 import { loadUser } from './actions/authActions';
+
 
 class App extends Component {
   componentDidMount() {
@@ -41,4 +42,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default withRouter(App);

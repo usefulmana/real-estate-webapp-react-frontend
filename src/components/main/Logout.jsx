@@ -3,14 +3,17 @@ import {logout} from '../../actions/authActions'
 import {connect} from 'react-redux'
 import styled from 'styled-components'
 import { Button} from 'reactstrap';
+import {Link} from 'react-router-dom'
 class Logout extends Component {
+
   render() {
     return (
       <Fragment>
       <LogoutWrapper>
-          <Button outline color='danger' onClick={this.props.logout}>
+          <Link to='/'><Button outline color='danger' onClick={this.props.logout}>
             <strong>LOGOUT</strong>
-        </Button>
+          </Button></Link>
+
       </LogoutWrapper>
       </Fragment>
     )
