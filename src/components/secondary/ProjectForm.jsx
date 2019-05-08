@@ -74,11 +74,11 @@ class NewProjectForm extends Component {
       this.props.createProject(project, this.props.auth.token)
       Swal.fire({
         type: "success",
-        title: "Success!",
+        title: "Success! Refresh to View",
         showConfirmButton: false,
-        timer: 500
+        timer: 2000
       });
-      setTimeout(window.location.reload(),5000)
+      setTimeout(this.toggle, 3000)
     }
   }
 

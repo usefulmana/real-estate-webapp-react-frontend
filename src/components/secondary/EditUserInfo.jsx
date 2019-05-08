@@ -89,11 +89,10 @@ class EditUserInfo extends Component {
       this.props.updateInfo(existingUser);
       Swal.fire({
         type: "success",
-        title: "Success!",
+        title: "Success! Refresh to View",
         showConfirmButton: false,
-        timer: 500
+        timer:2000
       });
-      setTimeout(window.location.reload(), 5000)
     }
   }
 

@@ -75,11 +75,11 @@ class EditProject extends Component {
             this.props.updateProject(project)
             Swal.fire({
                 type: "success",
-                title: "Success!",
+                title: "Success! Refresh to View",
                 showConfirmButton: false,
-                timer: 500
+                timer: 2000
             });
-           setTimeout(window.location.reload(),5000)
+            setTimeout(this.toggle, 3000)
         }
     }
     handleEdit(id, name,

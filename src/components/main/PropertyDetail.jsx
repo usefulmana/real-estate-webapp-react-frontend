@@ -4,51 +4,29 @@ import NavBar from '../secondary/NavBar';
 import {connect} from 'react-redux'
 import { getPropertiesByID } from '../../actions/propertyActions';
 import ContactCard from '../secondary/ContactCard'
-import { Card, CardImg, CardText, CardBody } from "reactstrap";
-
+import PropertyDetailCard from '../secondary/PropertyDetailCard';
+import Footer from '../secondary/Footer'
 class PropertyDetail extends Component {
-  constructor(){
-    super()
+  constructor(props){
+    super(props)
     this.state = {
-      property: [],
-     posterID:'',
-     poster:[]
+    property: [],
     }
   }
   componentDidMount() {
     this.props.getPropertiesByID(this.props.match.params.id)
-    this.setState({posterID:this.props.property.item.user})
-    this.fetchUser()
-    // this.fetchPropertyByID(this.props.match.params.id)
   }
-  fetchUser() {
-    if (this.state.posterID) {
-      fetch(`http://localhost:3000/user/${this.props.posterID}`)
-      .then(res => res.json())
-      .then(user => this.setState({ poster: user }))
-    }
-  }
-  fetchInfo(){
-    Promise.all([])
-  }
-  // fetchPropertyByID(pid){
-  //   fetch(`http://localhost:3000/property/byId/${pid}`)
-  //   .then(res => res.json())
-  //   .then(p => this.setState({property:p}))
-  // }
-  // fetchUser() {
-  //   if (this.props.userID) {
-  //     fetch(`http://localhost:3000/user/${this.props.property.user}`)
-  //     .then(res => res.json())
-  //     .then(user => this.setState({ user: user }))
-  //   }
-  // }
   render() {
-   console.log(this.state.poster)
+    if (!this.props.property.item.user && !this.props.property.item.project){
+      return null;
+    }
+    console.log(this.props.property.item.user)
+    // const test = this.props.property.item.user.map( u=>{return(<div>{u.name}</div>)})
     return (
       <PropertyDetailWrapper>
         <div>
           <NavBar/>
+          {/* <div>{test}</div> */}
           <div className='bg-dark '>
             <div id="carouselwithIndicators" class="carousel slide w-50 mx-auto" data-ride="carousel">
               <ol class="carousel-indicators">
@@ -85,16 +63,17 @@ class PropertyDetail extends Component {
               </a>
             </div>
           </div>
-          <div>
+          <div className='bg-light'>
             <div className="row cards">
               <div className="col-3">
-                <ContactCard/>
+                <ContactCard user={this.props.property.item.user} />
               </div>
               <div className="col-9">
-
+                <PropertyDetailCard property={this.props.property.item} project={this.props.property.item.project}/>
               </div>
             </div>
-          </div>        
+          </div> 
+          <Footer/>       
         </div>
       </PropertyDetailWrapper>
     )
@@ -103,10 +82,10 @@ class PropertyDetail extends Component {
 
 const PropertyDetailWrapper = styled.div`
 .cards{
-  margin-top: 5rem;
-  margin-left:15rem;
-  margin-right:15rem;
-  margin-bottom: 10rem;}`
+  padding-top: 3rem;
+  margin-left:25rem;
+  margin-right:25rem;
+  padding-bottom: 5rem}`
 
 const mapStateToProps = state => ({
   auth: state.auth,

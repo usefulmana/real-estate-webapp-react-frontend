@@ -26,9 +26,9 @@ class App extends Component {
         <Fragment>
           <Switch>
             <Route exact path="/" component={Home} />
-            <Route exact path="/results" component={SearchResults} />
             <Route path="/propertyDetails/:id" component={PropertyDetail} />
             <Route path="/projectDetails/:id" component={ProjectDetail} />
+            <Route path="/results/:query" component={SearchResults}/>
             <Route exact path="/propertyManager" component={PropertyManager} />
             <Route exact path="/projectManager" component={ProjectManager} />
             <Route exact path="/newProperty" component={PropertyForm} />

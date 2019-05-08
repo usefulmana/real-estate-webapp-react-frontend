@@ -5,7 +5,7 @@ import styled from 'styled-components'
 export default class Footer extends Component {
   render() {
     return (
-      <FooterWrapper>
+      <FooterWrapper className='footer'>
         <div className="row text-center bg-dark">
           <div className="col-12 col-lg-4">
             <hr className="light-bar" />
@@ -100,5 +100,8 @@ const FooterWrapper = styled.div`
 }
 .social p:hover{
   transform: scale(1.1)
+}
+.footer {
+
 }
 `

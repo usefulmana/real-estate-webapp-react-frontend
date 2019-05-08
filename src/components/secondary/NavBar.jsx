@@ -7,8 +7,17 @@ import Login from '../main/Login'
 import Logout from '../main/Logout'
 import SearchBar from './SearchBar'
 class NavBar extends Component {
-  state = {
-    isOpen: false
+  constructor(){
+    super()
+    this.state = {
+      query: '',
+      isOpen: false
+    }
+    this.onChange = this.onChange.bind(this)
+  }
+ 
+  onChange(e) {
+    this.setState({ [e.target.name]: e.target.value });
   }
   toggle = () => {
     this.setState({
@@ -56,11 +65,13 @@ class NavBar extends Component {
               <i className="navbar-brand fas fa-home"> HOMELY</i>
             </Link>
             <form className="form-inline">
-                  <input className="form-control" type="search" placeholder="Address, City, Province" name="search" id="search"/>
-                  <span className="input-group-append"><button class="btn btn-search my-2 my-sm-0 " type="submit">
-                    <i class="fa fa-search"></i>
-                  </button>
-              </span>     
+               <input className="form-control" type="search" placeholder="Address, City, Province" name="query" id="search" onChange={this.onChange}/>
+              <Link to={`results/${this.state.query}`}>
+                <span className="input-group-append"><button class="btn btn-search my-2 my-sm-0 " type="submit">
+                  <i class="fa fa-search"></i>
+                </button>
+                </span>  
+              </Link>   
             </form>
             <button
               className="navbar-toggler"

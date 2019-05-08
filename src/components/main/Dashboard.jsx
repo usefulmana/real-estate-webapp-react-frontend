@@ -40,13 +40,11 @@ export default class Dashboard extends Component {
     )
   }
 }
-
-
 const DashboardWrapper = styled.div`
 .tab{
   margin-top: 8rem;
   margin-left:15rem;
   margin-right:15rem;
-  margin-bottom: 10rem;
+  margin-bottom: 20rem;
 }
 `

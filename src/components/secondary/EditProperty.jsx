@@ -91,7 +91,7 @@ class EditProperty extends Component {
         e.preventDefault()
         // const isValid = this.validate()
         var property = {
-            title: this.state.propertyTitle,
+            title: this.state.propertyTitle.toUpperCase(),
             price: this.state.propertyPrice,
             area: this.state.propertyArea,
             numOfBedrooms: this.state.bedroom,
@@ -110,21 +110,21 @@ class EditProperty extends Component {
             this.setState({ project: '' })
             Swal.fire({
                 type: "success",
-                title: "Success!",
+                title: "Success! Refresh to View",
                 showConfirmButton: false,
-                timer: 500
+                timer: 2000
             });
-            setTimeout(window.location.reload(), 5000)
+            setTimeout(this.toggle,3000)
         }
         else {
             this.props.updateProperty(property, this.props.auth.token, this.props.property._id)
             Swal.fire({
                 type: "success",
-                title: "Success!",
+                title: "Success! Refresh to View",
                 showConfirmButton: false,
-                timer: 500
+                timer: 2000
             });
-            setTimeout(window.location.reload(), 5000)
+            setTimeout(this.toggle, 3000)
         }
     }
 
@@ -208,6 +208,7 @@ class EditProperty extends Component {
                                             onChange={this.onChange}
                                             value={this.state.province}
                                             placeholder="Province"
+                                            required
                                         />
                                     </Col>
                                 </Row>

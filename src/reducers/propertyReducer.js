@@ -3,6 +3,7 @@ import {
   ADD_PROPERTY,
   GET_PROPERTIES_BY_USER_ID,
   GET_PROPERTY_BY_ID,
+  GET_PROPERTIES_BY_ADDRESS,
   DELETE_PROPERTY,
   UPDATE_PROPERTY
 } from '../actions/types';
@@ -19,6 +20,11 @@ export default function(state = initialState, action) {
         items: action.payload
       };
     case GET_PROPERTIES_BY_USER_ID:
+      return {
+        ...state,
+        items: action.payload
+      };
+    case GET_PROPERTIES_BY_ADDRESS:
       return {
         ...state,
         items: action.payload

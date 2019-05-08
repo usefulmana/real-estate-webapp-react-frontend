@@ -3,6 +3,7 @@ import {
   ADD_PROPERTY,
   GET_PROPERTIES_BY_USER_ID,
   GET_PROPERTIES_BY_PROJECT_ID,
+  GET_PROPERTIES_BY_ADDRESS,
   GET_PROPERTY_BY_ID,
   DELETE_PROPERTY,
   UPDATE_PROPERTY
@@ -40,6 +41,18 @@ export function getPropertiesByID(id) {
       .then(property=>
         dispatch({
           type: GET_PROPERTY_BY_ID,
+          payload: property
+        })
+      );
+  };
+}
+export function getPropertiesByAddress(address) {
+  return function(dispatch) {
+    fetch(`http://localhost:3000/property/byAddress/${address}`)
+      .then(res => res.json())
+      .then(property=>
+        dispatch({
+          type: GET_PROPERTIES_BY_ADDRESS,
           payload: property
         })
       );
