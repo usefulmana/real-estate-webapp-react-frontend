@@ -1,14 +1,15 @@
 import React, { Component, Fragment } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
-import { Card, CardImg, CardText, CardBody} from "reactstrap";
+import { Card, CardImg, CardText, CardBody } from "reactstrap";
 import EditUserInfo from "./EditUserInfo";
+import { getUserInfoByTokenAPI } from "../../data/apiroutes";
 
 class UserCard extends Component {
   constructor() {
     super();
     this.state = {
-      user: "",
+      user: ""
     };
   }
 
@@ -17,13 +18,13 @@ class UserCard extends Component {
   }
 
   fetchUser() {
-    fetch("http://localhost:3000/auth/user", {
+    fetch(getUserInfoByTokenAPI, {
       headers: {
         "x-auth-token": this.props.auth.token
       }
     })
       .then(res => res.json())
-      .then(user => this.setState({ user: user}));
+      .then(user => this.setState({ user: user }));
   }
   render() {
     const { isAuthenticated } = this.props.auth;
@@ -35,7 +36,7 @@ class UserCard extends Component {
               top
               width="50%"
               src={this.state.user.avatar}
-              alt='avatar'
+              alt="avatar"
             />
 
             <CardBody className="text-center">
@@ -44,20 +45,20 @@ class UserCard extends Component {
               <CardText>
                 <p className="text-muted">
                   <span className="icon">
-                    <i class="fas fa-envelope" title='Email Address'/>
+                    <i class="fas fa-envelope" title="Email Address" />
                   </span>
                   {this.state.user.email}
                 </p>
                 <p className="text-muted">
                   <span className="icon">
-                    <i className="fas fa-phone" title='Phone #' />
+                    <i className="fas fa-phone" title="Phone #" />
                   </span>
                   {"    "}
                   {this.state.user.phone}
                 </p>
                 <p className="text-muted">
                   <span className="icon">
-                    <i class="far fa-calendar-alt" title='Joined Date'></i>
+                    <i class="far fa-calendar-alt" title="Joined Date" />
                   </span>
                   {"    "}
                   {this.state.user.registerDate}

@@ -1,11 +1,11 @@
-import React, { Component } from 'react'
-import styled from 'styled-components'
-import { Link } from 'react-router-dom'
-import { connect } from 'react-redux'
-import { clearErrors } from '../../actions/errorActions'
-import { createProperty } from '../../actions/propertyActions'
-import { getProjects } from '../../actions/projectActions';
-import Swal from 'sweetalert2'
+import React, { Component } from "react";
+import styled from "styled-components";
+import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { clearErrors } from "../../actions/errorActions";
+import { createProperty } from "../../actions/propertyActions";
+import { getProjects } from "../../actions/projectActions";
+import Swal from "sweetalert2";
 import {
   Button,
   Modal,
@@ -17,36 +17,39 @@ import {
   Alert,
   Row,
   Col
-} from 'reactstrap';
+} from "reactstrap";
+
+import { getUserInfoByTokenAPI } from "./../../data/apiroutes";
 
 class PropertyForm extends Component {
-
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       modal: false,
-      propertyTitle: '',
-      propertyPrice: '',
-      propertyArea: '',
-      bedroom: '',
-      bathroom: '',
-      direction: '',
-      address: '',
-      city: '',
-      province: '',
+      propertyTitle: "",
+      propertyPrice: "",
+      propertyArea: "",
+      bedroom: "",
+      bathroom: "",
+      direction: "",
+      address: "",
+      city: "",
+      province: "",
       imageURLs: [],
-      project:'',
-      user: ''
-    }
-    this.onChange = this.onChange.bind(this)
-    this.onSubmit = this.onSubmit.bind(this)
+      project: "",
+      user: ""
+    };
+    this.onChange = this.onChange.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
   }
   componentDidMount() {
-    fetch('http://localhost:3000/auth/user', {
+    fetch(getUserInfoByTokenAPI, {
       headers: {
-        'x-auth-token': `${this.props.auth.token}`
+        "x-auth-token": `${this.props.auth.token}`
       }
-    }).then(res => res.json()).then(json => this.setState({ user: json._id }));
+    })
+      .then(res => res.json())
+      .then(json => this.setState({ user: json._id }));
   }
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
@@ -59,7 +62,7 @@ class PropertyForm extends Component {
     });
   };
   onSubmit(e) {
-    e.preventDefault()
+    e.preventDefault();
     // const isValid = this.validate()
     var property = {
       title: this.state.propertyTitle.toUpperCase(),
@@ -72,30 +75,29 @@ class PropertyForm extends Component {
       city: this.state.city,
       province: this.state.province,
       user: this.state.user
-    }
-    
-    if (this.state.project){
-      console.log(this.state.project)
-      property.project = this.state.project
-      this.props.createProperty(property, this.props.auth.token)
-      this.setState({project:''})
+    };
+
+    if (this.state.project) {
+      console.log(this.state.project);
+      property.project = this.state.project;
+      this.props.createProperty(property, this.props.auth.token);
+      this.setState({ project: "" });
       Swal.fire({
         type: "success",
         title: "Success! Refresh to View",
         showConfirmButton: false,
         timer: 2000
       });
-      setTimeout(this.toggle, 3000)
-    }
-    else {
-      this.props.createProperty(property, this.props.auth.token)
+      setTimeout(this.toggle, 3000);
+    } else {
+      this.props.createProperty(property, this.props.auth.token);
       Swal.fire({
         type: "success",
         title: "Success! Refresh to View",
         showConfirmButton: false,
         timer: 2000
       });
-      setTimeout(this.toggle, 3000)
+      setTimeout(this.toggle, 3000);
     }
   }
 
@@ -113,12 +115,32 @@ class PropertyForm extends Component {
   // }
 
   render() {
-    const directions = ['North', 'East', 'South', 'West', 'Northwest', 'Northeast', 'Southwest','Southeast']
-    const directionChoices = directions.map(d => { return (<option value={d}>{d}</option>)})
-    const projects = this.props.projects.map(p => { return (<option value={p._id}>{p.name}</option>)})
+    const directions = [
+      "North",
+      "East",
+      "South",
+      "West",
+      "Northwest",
+      "Northeast",
+      "Southwest",
+      "Southeast"
+    ];
+    const directionChoices = directions.map(d => {
+      return <option value={d}>{d}</option>;
+    });
+    const projects = this.props.projects.map(p => {
+      return <option value={p._id}>{p.name}</option>;
+    });
     return (
       <NewPropertyFormWrapper>
-        <Button className="mb-3 add-new-button" outline color='success' onClick={this.toggle}>ADD NEW PROPERTY</Button>
+        <Button
+          className="mb-3 add-new-button"
+          outline
+          color="success"
+          onClick={this.toggle}
+        >
+          ADD NEW PROPERTY
+        </Button>
         <Modal isOpen={this.state.modal} toggle={this.toggle}>
           <ModalHeader toggle={this.toggle} className="mx-auto">
             PROPERTY FORM
@@ -129,9 +151,7 @@ class PropertyForm extends Component {
                 <i className="navbar-brand fas fa-home"> HOMELY</i>
               </Link>
             </div>
-            {this.state.msg ? (
-              <Alert> {this.state.msg}</Alert>
-            ) : null}
+            {this.state.msg ? <Alert> {this.state.msg}</Alert> : null}
             <Form onSubmit={this.onSubmit} className="form-signin">
               <FormGroup>
                 <Input
@@ -139,7 +159,7 @@ class PropertyForm extends Component {
                   id="inputTitle"
                   className=" mb-3 mt-2"
                   placeholder="Post Title"
-                  name = "propertyTitle"
+                  name="propertyTitle"
                   onChange={this.onChange}
                   required
                   autoFocus
@@ -159,7 +179,7 @@ class PropertyForm extends Component {
                       type="text"
                       name="city"
                       className="mb-3 w-10"
-                      min='0'
+                      min="0"
                       placeholder="City / Town"
                       onChange={this.onChange}
                       required
@@ -182,7 +202,9 @@ class PropertyForm extends Component {
                   className="custom-select mb-3"
                   onChange={this.onChange}
                 >
-                  <option value='' selected>Project</option>
+                  <option value="" selected>
+                    Project
+                  </option>
                   {projects}
                 </Input>
                 <Row form>
@@ -191,7 +213,7 @@ class PropertyForm extends Component {
                       type="number"
                       name="propertyPrice"
                       className="mb-3 w-10"
-                      min='0'
+                      min="0"
                       placeholder="Price in USD"
                       onChange={this.onChange}
                       required
@@ -203,7 +225,7 @@ class PropertyForm extends Component {
                       name="bedroom"
                       className="mb-3 w-10"
                       onChange={this.onChange}
-                      min='0'
+                      min="0"
                       placeholder="Bedrooms"
                     />
                   </Col>
@@ -213,7 +235,7 @@ class PropertyForm extends Component {
                       name="bathroom"
                       className="mb-3 w-10"
                       onChange={this.onChange}
-                      min='0'
+                      min="0"
                       placeholder="Bathrooms"
                     />
                   </Col>
@@ -225,7 +247,7 @@ class PropertyForm extends Component {
                       name="propertyArea"
                       className="mb-3 w-10"
                       onChange={this.onChange}
-                      min='0'
+                      min="0"
                       placeholder="Property Area"
                       required
                     />
@@ -238,7 +260,9 @@ class PropertyForm extends Component {
                       onChange={this.onChange}
                       required
                     >
-                      <option value='' selected disabled>Property Direction</option>
+                      <option value="" selected disabled>
+                        Property Direction
+                      </option>
                       {directionChoices}
                     </Input>
                   </Col>
@@ -248,26 +272,26 @@ class PropertyForm extends Component {
                   type="submit"
                 >
                   Submit
-                  </button>
-              </FormGroup>         
+                </button>
+              </FormGroup>
             </Form>
           </ModalBody>
         </Modal>
       </NewPropertyFormWrapper>
-    )
+    );
   }
 }
 
 const NewPropertyFormWrapper = styled.div`
- .top-icon i{
+  .top-icon i {
     color: #f93838 !important;
     font-size: 25px;
     margin-bottom: 1rem;
   }
-  .top-icon i:hover{
-    transform:scale(1.1)
+  .top-icon i:hover {
+    transform: scale(1.1);
   }
-   .card-signin {
+  .card-signin {
     border: 0;
     border-radius: 1rem;
     box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
@@ -308,10 +332,12 @@ const NewPropertyFormWrapper = styled.div`
   .btn-danger {
     background: #f93838 !important;
   }
-
-`
+`;
 const mapStateToProps = state => ({
   auth: state.auth,
   projects: state.projects.items
-})
-export default connect(mapStateToProps, { createProperty, clearErrors, getProjects })(PropertyForm)
+});
+export default connect(
+  mapStateToProps,
+  { createProperty, clearErrors, getProjects }
+)(PropertyForm);

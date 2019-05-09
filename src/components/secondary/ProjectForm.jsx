@@ -1,10 +1,10 @@
-import React, { Component } from 'react'
-import styled from 'styled-components'
-import { Link } from 'react-router-dom'
+import React, { Component } from "react";
+import styled from "styled-components";
+import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
-import { createProject } from '../../actions/projectActions'
-import {clearErrors} from '../../actions/errorActions'
-import { connect } from 'react-redux'
+import { createProject } from "../../actions/projectActions";
+import { clearErrors } from "../../actions/errorActions";
+import { connect } from "react-redux";
 import {
   Button,
   Modal,
@@ -14,34 +14,35 @@ import {
   FormGroup,
   Input,
   Alert
-} from 'reactstrap';
-
+} from "reactstrap";
+import { getUserInfoByTokenAPI } from "./../../data/apiroutes";
 class NewProjectForm extends Component {
-
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       modal: false,
-      projectID:'',
-      projectName: '',
-      projectOwner: '',
-      projectArea: '',
-      projectType: '',
-      projectStartYear: '',
-      projectEndYear: '',
-      projectAreaError: '',
-      user: '',
+      projectID: "",
+      projectName: "",
+      projectOwner: "",
+      projectArea: "",
+      projectType: "",
+      projectStartYear: "",
+      projectEndYear: "",
+      projectAreaError: "",
+      user: "",
       msg: null
-    }
-    this.onChange = this.onChange.bind(this)
-    this.onSubmit = this.onSubmit.bind(this)
+    };
+    this.onChange = this.onChange.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
   }
   componentDidMount() {
-    fetch('http://localhost:3000/auth/user', {
+    fetch(getUserInfoByTokenAPI, {
       headers: {
-        'x-auth-token': `${this.props.auth.token}`
+        "x-auth-token": `${this.props.auth.token}`
       }
-    }).then(res => res.json()).then(json => this.setState({ user: json._id }));
+    })
+      .then(res => res.json())
+      .then(json => this.setState({ user: json._id }));
   }
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
@@ -54,13 +55,13 @@ class NewProjectForm extends Component {
     });
   };
   onSubmit(e) {
-    e.preventDefault()
-    const isValid = this.validate()
+    e.preventDefault();
+    const isValid = this.validate();
 
     if (isValid) {
       this.setState({
-        projectAreaError: ''
-      })
+        projectAreaError: ""
+      });
 
       const project = {
         name: this.state.projectName,
@@ -70,51 +71,63 @@ class NewProjectForm extends Component {
         startYear: this.state.projectStartYear,
         endYear: this.state.projectEndYear,
         user: this.state.user
-      }
-      this.props.createProject(project, this.props.auth.token)
+      };
+      this.props.createProject(project, this.props.auth.token);
       Swal.fire({
         type: "success",
         title: "Success! Refresh to View",
         showConfirmButton: false,
         timer: 2000
       });
-      setTimeout(this.toggle, 3000)
+      setTimeout(this.toggle, 3000);
     }
   }
 
   validate = () => {
-    let projectAreaError = ''
+    let projectAreaError = "";
 
     if (!this.state.projectArea || this.state.projectArea <= 0) {
-      projectAreaError = 'This field cannot be blank. Total area cannot be negative or equal to 0!'
+      projectAreaError =
+        "This field cannot be blank. Total area cannot be negative or equal to 0!";
     }
     if (projectAreaError) {
-      this.setState({ projectAreaError })
+      this.setState({ projectAreaError });
       return false;
     }
     return true;
-  }
+  };
 
   render() {
-    let minOffset = 0, maxOffset = 50;
-    let thisYear = (new Date()).getFullYear();
+    let minOffset = 0,
+      maxOffset = 50;
+    let thisYear = new Date().getFullYear();
     let pastYears = [];
     let futureYears = [];
     for (let x = 0; x <= maxOffset; x++) {
-      pastYears.push(thisYear - x)
+      pastYears.push(thisYear - x);
     }
 
     for (let x = 0; x <= maxOffset; x++) {
-      futureYears.push(thisYear + x)
+      futureYears.push(thisYear + x);
     }
 
-    const yearListPast = pastYears.map((x) => { return (<option key={x}>{x}</option>) });
-    const yearListFuture = futureYears.map((x) => { return (<option key={x}>{x}</option>) });
+    const yearListPast = pastYears.map(x => {
+      return <option key={x}>{x}</option>;
+    });
+    const yearListFuture = futureYears.map(x => {
+      return <option key={x}>{x}</option>;
+    });
     return (
       <NewProjectFormWrapper>
-        <Button className="mb-3 add-new-button" outline color='success' onClick={this.toggle}>ADD NEW PROJECT</Button>
-        <Modal isOpen={this.state.modal}
-          toggle={this.toggle}>
+        <Button
+          className="mb-3 add-new-button"
+          outline
+          color="success"
+          onClick={this.toggle}
+        >
+          ADD NEW PROJECT
+        </Button>
+        <Modal isOpen={this.state.modal} toggle={this.toggle}>
           <ModalHeader toggle={this.toggle} className="mx-auto">
             PROJECT FORM
           </ModalHeader>
@@ -124,9 +137,7 @@ class NewProjectForm extends Component {
                 <i className="navbar-brand fas fa-home"> HOMELY</i>
               </Link>
             </div>
-            {this.state.msg ? (
-              <Alert> {this.state.msg}</Alert>
-            ) : null}
+            {this.state.msg ? <Alert> {this.state.msg}</Alert> : null}
             <Form onSubmit={this.onSubmit} className="form-signin">
               <FormGroup>
                 <Input
@@ -172,7 +183,9 @@ class NewProjectForm extends Component {
                   onChange={this.onChange}
                   required
                 >
-                  <option value="" selected disabled>Project Type</option>
+                  <option value="" selected disabled>
+                    Project Type
+                  </option>
                   <option value="House">House</option>
                   <option value="Land">Land</option>
                   <option value="Apartment">Apartment</option>
@@ -186,7 +199,9 @@ class NewProjectForm extends Component {
                   onChange={this.onChange}
                   required
                 >
-                  <option value="" selected disabled>Start Year</option>
+                  <option value="" selected disabled>
+                    Start Year
+                  </option>
                   {yearListPast}
                 </Input>
                 <Input
@@ -198,7 +213,9 @@ class NewProjectForm extends Component {
                   onChange={this.onChange}
                   required
                 >
-                  <option value="" selected disabled>End Year</option>
+                  <option value="" selected disabled>
+                    End Year
+                  </option>
                   {yearListFuture}
                 </Input>
                 <button
@@ -206,29 +223,29 @@ class NewProjectForm extends Component {
                   type="submit"
                 >
                   Submit
-                  </button>
-              </FormGroup>     
+                </button>
+              </FormGroup>
             </Form>
           </ModalBody>
         </Modal>
       </NewProjectFormWrapper>
-    )
+    );
   }
 }
 const NewProjectFormWrapper = styled.div`
-.my-select {
+  .my-select {
     border-radius: 2rem;
     height: auto;
   }
- .top-icon i{
+  .top-icon i {
     color: #f93838 !important;
     font-size: 25px;
     margin-bottom: 1rem;
   }
-  .top-icon i:hover{
-    transform:scale(1.1)
+  .top-icon i:hover {
+    transform: scale(1.1);
   }
-   .card-signin {
+  .card-signin {
     border: 0;
     border-radius: 1rem;
     box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
@@ -268,8 +285,13 @@ const NewProjectFormWrapper = styled.div`
   }
   .btn-danger {
     background: #f93838 !important;
-  } `
+  }
+`;
+
 const mapStateToProps = state => ({
   auth: state.auth
-})
-export default connect(mapStateToProps, { createProject, clearErrors })(NewProjectForm)
+});
+export default connect(
+  mapStateToProps,
+  { createProject, clearErrors }
+)(NewProjectForm);

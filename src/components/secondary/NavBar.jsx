@@ -24,6 +24,10 @@ class NavBar extends Component {
       isOpen: !this.state.isOpen
     });
   };
+
+  handleClick(){
+    setTimeout(this.forceUpdate,5000)
+  }
   render() {
     const { isAuthenticated, user } = this.props.auth;
 
@@ -66,7 +70,7 @@ class NavBar extends Component {
             </Link>
             <form className="form-inline">
                <input className="form-control" type="search" placeholder="Address, City, Province" name="query" id="search" onChange={this.onChange}/>
-              <Link to={`results/${this.state.query}`}>
+              <Link to={{pathname:`/results/${this.state.query}`, state:'flushDeal'}}>
                 <span className="input-group-append"><button class="btn btn-search my-2 my-sm-0 " type="submit">
                   <i class="fa fa-search"></i>
                 </button>

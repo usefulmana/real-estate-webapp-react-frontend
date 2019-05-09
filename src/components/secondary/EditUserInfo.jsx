@@ -1,28 +1,24 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import {
-  Button,
-  Form,
-  FormGroup,
-  Input,
-  Alert
-} from "reactstrap";
+import { Button, Form, FormGroup, Input, Alert } from "reactstrap";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { updateInfo } from "../../actions/authActions";
 import { clearErrors } from "../../actions/errorActions";
-import Swal from 'sweetalert2'
+import Swal from "sweetalert2";
+import { getUserInfoByTokenAPI } from "../../data/apiroutes";
+
 class EditUserInfo extends Component {
   constructor() {
     super();
     this.state = {
-      userID:'',
-      user:[],
+      userID: "",
+      user: [],
       userName: "",
       userEmail: "",
       userPhone: "",
       userPassword: "",
-      imageURL:"",
+      imageURL: "",
       userPassword2: "",
       userErrors: "",
       userPasswordError: "",
@@ -48,7 +44,7 @@ class EditUserInfo extends Component {
   }
 
   fetchUser() {
-    fetch("http://localhost:3000/auth/user", {
+    fetch(getUserInfoByTokenAPI, {
       headers: {
         "x-auth-token": this.props.auth.token
       }
@@ -91,7 +87,7 @@ class EditUserInfo extends Component {
         type: "success",
         title: "Success! Refresh to View",
         showConfirmButton: false,
-        timer:2000
+        timer: 2000
       });
     }
   }
@@ -117,19 +113,33 @@ class EditUserInfo extends Component {
   render() {
     return (
       <LoginWrapper>
-        <Button className="mb-3 add-new-button" outline color='success' 
-          onClick={this.handleEdit.bind(this, this.state.user._id, this.state.user.name, this.state.user.email,this.state.user.phone, this.state.user.avatar)} 
-        data-toggle="collapse" data-target="#demo">EDIT PROFILE</Button>
+        <Button
+          className="mb-3 add-new-button"
+          outline
+          color="success"
+          onClick={this.handleEdit.bind(
+            this,
+            this.state.user._id,
+            this.state.user.name,
+            this.state.user.email,
+            this.state.user.phone,
+            this.state.user.avatar
+          )}
+          data-toggle="collapse"
+          data-target="#demo"
+        >
+          EDIT PROFILE
+        </Button>
         <div id="demo" class="collapse">
           <Form onSubmit={this.onSubmit}>
             <FormGroup>
               <Input
                 type="name"
                 name="userName"
-                value = {this.state.userName}
+                value={this.state.userName}
                 onChange={this.onChange}
                 className="mb-3 mt-2"
-                placeholder='Name*'
+                placeholder="Name*"
                 required
               />
               <Input
@@ -139,7 +149,7 @@ class EditUserInfo extends Component {
                 onChange={this.onChange}
                 value={this.state.userEmail}
                 className="mb-3"
-                placeholder ='Email*'
+                placeholder="Email*"
                 required
               />
               <Input
@@ -149,7 +159,7 @@ class EditUserInfo extends Component {
                 value={this.state.userPhone}
                 onChange={this.onChange}
                 className="mb-3"
-                placeholder='Phone #*'
+                placeholder="Phone #*"
                 required
               />
               <Input
@@ -158,7 +168,7 @@ class EditUserInfo extends Component {
                 onChange={this.onChange}
                 className="mb-3"
                 value={this.state.imageURL}
-                placeholder='Avatar Link'
+                placeholder="Avatar Link"
               />
               {/* <Input
                 type="password"
@@ -184,9 +194,7 @@ class EditUserInfo extends Component {
                 placeholder="Retype Password*"
                 required
               /> */}
-              <div className='text-muted mb-2 text-left'>
-                * Required fields
-              </div>
+              <div className="text-muted mb-2 text-left">* Required fields</div>
               <div style={{ fontSize: 12, color: "red" }}>
                 {this.state.userPasswordError}
               </div>
@@ -195,7 +203,7 @@ class EditUserInfo extends Component {
               ) : null}
               <Button color="primary" block>
                 SUBMIT
-                </Button>
+              </Button>
             </FormGroup>
           </Form>
         </div>

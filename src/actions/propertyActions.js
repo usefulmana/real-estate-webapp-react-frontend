@@ -9,10 +9,18 @@ import {
   UPDATE_PROPERTY
 } from './types';
 import axios from 'axios';
+import { 
+  getAllPropertiesAPI,
+  getPropertiesByAddressAPI,
+  getPropertyByIdAPI,
+  addAPropertyAPI,
+  updateAPropertyAPI,
+  deleteAPropertyAPI
+ } from './../data/apiroutes';
 export function getProperties() {
   return function(dispatch) {
     console.log('property');
-    fetch('http://localhost:3000/property')
+    fetch(getAllPropertiesAPI)
       .then(res => res.json())
       .then(properties =>
         dispatch({
@@ -24,7 +32,7 @@ export function getProperties() {
 }
 export function getPropertiesByUserID(id) {
   return function(dispatch) {
-    fetch('http://localhost:3000/property')
+    fetch(getAllPropertiesAPI)
       .then(res => res.json())
       .then(properties =>
         dispatch({
@@ -36,7 +44,8 @@ export function getPropertiesByUserID(id) {
 }
 export function getPropertiesByID(id) {
   return function(dispatch) {
-    fetch(`http://localhost:3000/property/byId/${id}`)
+    console.log(getPropertyByIdAPI + `/${id}`)
+    fetch(getPropertyByIdAPI +`/${id}`)
       .then(res => res.json())
       .then(property=>
         dispatch({
@@ -48,7 +57,8 @@ export function getPropertiesByID(id) {
 }
 export function getPropertiesByAddress(address) {
   return function(dispatch) {
-    fetch(`http://localhost:3000/property/byAddress/${address}`)
+    
+    fetch(`${getPropertiesByAddressAPI}/${address}`)
       .then(res => res.json())
       .then(property=>
         dispatch({
@@ -60,7 +70,7 @@ export function getPropertiesByAddress(address) {
 }
 export function getPropertiesByProjectID(id) {
   return function(dispatch) {
-    fetch('http://localhost:3000/property')
+    fetch(getAllPropertiesAPI)
       .then(res => res.json())
       .then(properties =>
         dispatch({
@@ -71,7 +81,7 @@ export function getPropertiesByProjectID(id) {
   };
 }
 export const createProperty = (propertyData, token) => dispatch => {
-  fetch('http://localhost:3000/property', {
+  fetch(addAPropertyAPI, {
     method: 'POST',
     headers: {
       'x-auth-token': token,
@@ -94,7 +104,7 @@ export const deleteProperty = (pid, uid) => dispatch => {
       'x-auth-token': uid
     }
   };
-  fetch(`http://localhost:3000/property/${pid}`, config)
+  fetch(`${deleteAPropertyAPI}/${pid}`, config)
     .then(res => res.json())
     .then(property =>
       dispatch({
@@ -137,7 +147,7 @@ export const updateProperty = (
     project
   });
   axios
-    .put(`http://localhost:3000/property/${id}`, body, config)
+    .put(`${updateAPropertyAPI}/${id}`, body, config)
     .then(res =>
       dispatch({
         type: UPDATE_PROPERTY,

@@ -44,13 +44,13 @@ class EditProperty extends Component {
         this.onChange = this.onChange.bind(this)
         this.onSubmit = this.onSubmit.bind(this)
     }
-    componentDidMount() {
-        fetch('http://localhost:3000/auth/user', {
-            headers: {
-                'x-auth-token': `${this.props.auth.token}`
-            }
-        }).then(res => res.json()).then(json => this.setState({ user: json._id }));
-    }
+    // componentDidMount() {
+    //     fetch('http://localhost:3000/auth/user', {
+    //         headers: {
+    //             'x-auth-token': `${this.props.auth.token}`
+    //         }
+    //     }).then(res => res.json()).then(json => this.setState({ user: json._id }));
+    // }
     onChange(e) {
         this.setState({ [e.target.name]: e.target.value });
     }

@@ -6,12 +6,21 @@ import {
   DELETE_PROJECT,
   UPDATE_PROJECT
 } from './types';
+
 import axios from 'axios';
 import { returnErrors } from './errorActions';
+import { 
+  getAllProjectsAPI,
+  getProjectByIdAPI,
+  getProjectsByNameAPI,
+  addAProjectAPI,
+  deleteAProjectAPI,
+  updateAProjectAPI
+ } from '../data/apiroutes';
 
 export function getProjects() {
   return function(dispatch) {
-    fetch('http://localhost:3000/project')
+    fetch(getAllProjectsAPI)
       .then(res => res.json())
       .then(projects =>
         dispatch({
@@ -24,7 +33,7 @@ export function getProjects() {
 
 export function getProjectsByUserID(id) {
   return function(dispatch) {
-    fetch('http://localhost:3000/project')
+    fetch(getAllProjectsAPI)
       .then(res => res.json())
       .then(projects =>
         dispatch({
@@ -44,7 +53,7 @@ export const createProject = (projectData, token) => dispatch => {
     }
   };
   const body = JSON.stringify(projectData);
-  axios.post('http://localhost:3000/project', body, config).then(res =>
+  axios.post(addAProjectAPI, body, config).then(res =>
     dispatch({
       type: ADD_PROJECT,
       payload: res.data
@@ -59,7 +68,7 @@ export const deleteProject = (pid, uid) => dispatch => {
       'x-auth-token': uid
     }
   };
-  fetch(`http://localhost:3000/project/${pid}`, config)
+  fetch(`${deleteAProjectAPI}/${pid}`, config)
     .then(res => res.json())
     .then(project =>
       dispatch({
@@ -93,7 +102,7 @@ export const updateProject = ({
     startYear,
     endYear
   });
-  axios.put(`http://localhost:3000/project/${id}`, body, config)
+  axios.put(`${updateAProjectAPI}/${id}`, body, config)
     .then(res =>
       dispatch({
         type: UPDATE_PROJECT,

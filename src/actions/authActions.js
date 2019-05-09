@@ -12,13 +12,14 @@ import {
   UPDATE_SUCCESS,
   UPDATE_FAIL
 } from './types';
+import { registerAPI, loginAPI, updateUserInfoAPI,getUserByIdAPI, getUserInfoByTokenAPI } from '../data/apiroutes';
 
 // Check token & load user
 
 export const loadUser = () => (dispatch, getState) => {
   dispatch({ type: USER_LOADING });
   axios
-    .get('http://localhost:3000/auth/user', tokenConfig(getState))
+    .get(getUserInfoByTokenAPI, tokenConfig(getState))
     .then(res =>
       dispatch({
         type: USER_LOADED,
@@ -50,7 +51,7 @@ export const register = ({
   const body = JSON.stringify({ name, email, phone, password, avatar });
 
   axios
-    .post('http://localhost:3000/user', body, config)
+    .post(registerAPI, body, config)
     .then(res =>
       dispatch({
         type: REGISTER_SUCCESS,
@@ -86,7 +87,7 @@ export const updateInfo = ({
   const body = JSON.stringify({ name, email, phone, avatar});
 
   axios
-    .put(`http://localhost:3000/user/${id}`, body, config)
+    .put(`${updateUserInfoAPI}/${id}`, body, config)
     .then(res =>
       dispatch({
         type: UPDATE_SUCCESS,
@@ -113,7 +114,7 @@ export const login = ({ email, password }) => dispatch => {
   // Request body
   const body = JSON.stringify({ email, password });
   axios
-    .post('http://localhost:3000/auth', body, config)
+    .post(loginAPI, body, config)
     .then(res =>
       dispatch({
         type: LOGIN_SUCCESS,
