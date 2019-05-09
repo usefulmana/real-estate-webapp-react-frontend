@@ -110,7 +110,7 @@ input:placeholder-shown {
     text-overflow: ellipsis;
 }
 .form-inline{
-  width: 57%;
+  width: 55%;
   display: flex;
   justify-content: left;
 }

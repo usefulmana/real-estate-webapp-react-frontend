@@ -4,20 +4,29 @@ import { getProjects } from '../../actions/projectActions';
 import {getProperties} from '../../actions/propertyActions'
 
 class Test extends Component {
+  state ={
+    imageUrls: []
+  }
     componentDidMount() {
-      this.props.getProperties();
+    }
+    addImageURL = (e) =>{
+      this.setState(prevState => ({
+        imageUrls: [...prevState.imageUrls]
+      }))
     }
     
   render() {
-      const properties = this.props.properties.map(p => (
-          <div key={p._id}>
-              <p>{p.title}</p>
-          </div>
-      ))
     return (
       <div>
-        <h1>PROJECTS</h1>
-            {properties}
+      <input type="text" placeholder="imageUrl"/>
+       <button className="btn" onClick={this.handleClick}>ADD MORE</button>
+       {imageUrls.map(url =>  {
+         return(
+           <div className="" key={id}>
+             <input type="text" placeholder="imageUrl" />
+           </div>
+         )
+       })}
       </div>
     )
   }

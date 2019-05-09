@@ -191,7 +191,7 @@ class PropertyForm extends Component {
                       name="province"
                       className="mb-3 w-10"
                       onChange={this.onChange}
-                      placeholder="Province"
+                      placeholder="Province / State"
                       required
                     />
                   </Col>

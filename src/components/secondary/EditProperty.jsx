@@ -207,7 +207,7 @@ class EditProperty extends Component {
                                             className="mb-3 w-10"
                                             onChange={this.onChange}
                                             value={this.state.province}
-                                            placeholder="Province"
+                                            placeholder="Province / State"
                                             required
                                         />
                                     </Col>
