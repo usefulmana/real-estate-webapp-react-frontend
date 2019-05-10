@@ -44,7 +44,7 @@ export function getPropertiesByUserID(id) {
 }
 export function getPropertiesByID(id) {
   return function(dispatch) {
-    console.log(getPropertyByIdAPI + `/${id}`)
+
     fetch(getPropertyByIdAPI +`/${id}`)
       .then(res => res.json())
       .then(property=>

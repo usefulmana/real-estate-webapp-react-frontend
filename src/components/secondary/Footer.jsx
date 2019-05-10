@@ -83,6 +83,7 @@ const FooterWrapper = styled.div`
   color: white !important;
 }
 .footer{
+  width: 100%;
   margin-top: -33px;
   padding-top:13px;
   padding-bottom:1px;

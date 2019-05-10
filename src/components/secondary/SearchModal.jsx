@@ -7,8 +7,9 @@ import {
   ModalHeader,
   ModalBody,
   Form,
-  FormGroup,
-  Input
+  Input,
+  InputGroup,
+  InputGroupAddon
 } from "reactstrap";
 
 export default class SearchModal extends Component {
@@ -51,9 +52,9 @@ export default class SearchModal extends Component {
                   <i className="navbar-brand fas fa-home"> HOMELY</i>
                 </Link>
               </div>
-              <Form className="form-signin">
-                <FormGroup>
-                  <input
+              <Form className="form-signin mb-4">
+                <InputGroup>
+                  <Input
                     className="form-control"
                     type="search"
                     placeholder="Address, City, Province"
@@ -67,16 +68,9 @@ export default class SearchModal extends Component {
                       state: "flushDeal"
                     }}
                   >
-                    <span className="input-group-append">
-                      <button
-                        class="btn btn-search my-2 my-sm-0 "
-                        type="submit"
-                      >
-                        <i class="fa fa-search" />
-                      </button>
-                    </span>
+                      <InputGroupAddon addonType="append"><Button color="secondary"><i class="fa fa-search" /></Button></InputGroupAddon>
                   </Link>
-                </FormGroup>
+                </InputGroup>
               </Form>
             </ModalBody>
           </Modal>

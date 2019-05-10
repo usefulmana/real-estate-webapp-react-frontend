@@ -14,6 +14,7 @@ import { Provider } from 'react-redux';
 import store from './store';
 import Dashboard from './components/main/Dashboard';
 import { loadUser } from './actions/authActions';
+import Test from './components/main/Test';
 
 
 class App extends Component {
@@ -35,7 +36,8 @@ class App extends Component {
             <Route exact path="/projectManager" component={ProjectManager} />
             <Route exact path="/newProperty" component={PropertyForm} />
             <Route exact path="/newProject" component={ProjectForm} />
-            <Route exact path="/dashboard" component={Dashboard} />    
+            <Route exact path="/dashboard" component={Dashboard} /> 
+            <Route exact path = "/test" component ={Test}/> 
             <Route component={Default} />
           </Switch>
         </Fragment>

@@ -52,7 +52,6 @@ class PropertyDetail extends Component {
       )
     }
     // const test = this.props.property.item.user.map( u=>{return(<div>{u.name}</div>)})
-    console.log(this.props.property.item.imageURL[0])
     return (
       <PropertyDetailWrapper>
         <div>
