@@ -81,6 +81,7 @@ export function getPropertiesByProjectID(id) {
   };
 }
 export const createProperty = (propertyData, token) => dispatch => {
+  
   fetch(addAPropertyAPI, {
     method: 'POST',
     headers: {
@@ -96,6 +97,7 @@ export const createProperty = (propertyData, token) => dispatch => {
         payload: property
       })
     );
+    console.log(JSON.stringify(propertyData))
 };
 export const deleteProperty = (pid, uid) => dispatch => {
   const config = {

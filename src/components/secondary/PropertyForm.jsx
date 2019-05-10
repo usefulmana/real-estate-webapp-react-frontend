@@ -36,11 +36,16 @@ class PropertyForm extends Component {
       city: "",
       province: "",
       imageURLs: [],
+      imageURL:'',
       project: "",
-      user: ""
+      user: "",
+      urlCount:'',
+      addImage:false,
+      addImageError:""
     };
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+    this.handleAddInput = this.handleAddInput.bind(this)
   }
   componentDidMount() {
     fetch(getUserInfoByTokenAPI, {
@@ -53,6 +58,32 @@ class PropertyForm extends Component {
   }
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
+  }
+  // onChangeImageURL(e) {
+   
+  //   this.setState( {
+  //     imageURLs: this.state.imageURLs.concat(e.target.value)
+  //   });
+  // }
+  handleAddInput (){
+    var regex = /(http(s?):)?([/|.|\w|\s|-])*\.(?:jpg|png)/g
+    let url = this.state.imageURL
+  }
+  addImageUrlInput(){
+    this.setState({imageURLs: [...this.state.imageURLs,'']})
+  }
+  handleImageUrlChange(e, index){
+    this.state.imageURLs[index] =  e.target.value
+    this.setState({imageURLs: this.state.imageURLs})
+  }
+  handleRemove(index){
+      this.state.imageURLs.splice(index,1)
+
+      console.log(this.state.imageURLs)
+
+      this.setState({
+        imageURLs: this.state.imageURLs
+      })
   }
   toggle = () => {
     // Clear errors
@@ -74,9 +105,10 @@ class PropertyForm extends Component {
       address: this.state.address,
       city: this.state.city,
       province: this.state.province,
-      user: this.state.user
+      user: this.state.user,
+      imageURL: this.state.imageURLs
     };
-
+    console.log(property)
     if (this.state.project) {
       console.log(this.state.project);
       property.project = this.state.project;
@@ -115,6 +147,33 @@ class PropertyForm extends Component {
   // }
 
   render() {
+    const imageForm = () =>{
+      return(
+        <Row className="button" form>
+          <Col md={9}>
+            <Input
+              type="url"
+              className=" mb-3"
+              placeholder="Image Link"
+              name="imageURL"
+              onChange={this.onChange}
+            />
+          </Col>
+          <Col md={3}>
+            <Button
+              outline
+              color="success"
+              size="sm"
+              title="Add More"
+
+              onClick={this.handleAddInput.bind(this)}
+            >
+              Add Image
+                    </Button>
+          </Col>
+        </Row>
+      )
+    }
     const directions = [
       "North",
       "East",
@@ -267,6 +326,45 @@ class PropertyForm extends Component {
                     </Input>
                   </Col>
                 </Row>
+                {this.state.imageURLs.map((imageURL,index) =>{
+                  return(
+                    <Row className="button" form key={index}>
+                        <Col md={9}>
+                        <Input
+                          type="url"
+                          className=" mb-3"
+                          placeholder="Image Link"
+                          onChange={(e) => this.handleImageUrlChange(e,index)}
+                          value={imageURL}
+                        />
+                        </Col>
+                        <Col md={3}>
+                        <Button
+                          outline
+                          color="danger"
+                          size="sm"
+                          title="Remove"
+                          className="mt-1"
+                          onClick={(index) => this.handleRemove(index)}
+                        >
+                          <i class="fas fa-minus"></i>
+                        </Button>
+                        </Col>
+                    </Row>
+                    
+                  )
+                })}
+                <Button
+                  outline
+                  color="success"
+                  size="sm"
+                  title="Add More"
+                  className="mb-3"
+                  onClick={(e) => this.addImageUrlInput(e)}
+                >
+                  <i className="fas fa-plus"></i>{' '}Add Image
+                    </Button>
+                
                 <button
                   className="btn btn-lg btn-primary btn-block text-uppercase"
                   type="submit"
@@ -283,6 +381,12 @@ class PropertyForm extends Component {
 }
 
 const NewPropertyFormWrapper = styled.div`
+.button{
+  height: auto
+}
+  .button{
+    vertical-align: top;
+  }
   .top-icon i {
     color: #f93838 !important;
     font-size: 25px;

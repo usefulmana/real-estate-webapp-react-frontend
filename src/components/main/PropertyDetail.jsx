@@ -6,6 +6,8 @@ import { getPropertiesByID } from '../../actions/propertyActions';
 import ContactCard from '../secondary/ContactCard'
 import PropertyDetailCard from '../secondary/PropertyDetailCard';
 import Footer from '../secondary/Footer'
+import NotAvailable from '../../img/NotAvailable.jpg'
+import Image from 'react-image-resizer'
 class PropertyDetail extends Component {
   constructor(props){
     super(props)
@@ -20,8 +22,37 @@ class PropertyDetail extends Component {
     if (!this.props.property.item.user && !this.props.property.item.project){
       return null;
     }
-    console.log(this.props.property.item.user)
+    const defaultCarouselItem =()=>{
+        return(
+          <div className="carousel-item active">
+            <img class="d-block w-100 h-100"
+              src={NotAvailable}
+              alt="Not Available"></img>
+          </div>
+        )
+    }
+    var carouselItems = () =>{
+      return(
+        <React.Fragment>
+          <div className="carousel-item active">
+            <img class="d-inline-block w-100 h-100"
+              src={this.props.property.item.imageURL[0]}
+              alt="First slide"></img>
+          </div>
+          {this.props.property.item.imageURL.slice(1).map(url => {
+            return (
+              <div className="carousel-item">
+                <img class="d-block w-100 h-100"
+                  src={url}
+                  alt="First slide"></img>
+              </div>
+            )
+          })}
+        </React.Fragment>
+      )
+    }
     // const test = this.props.property.item.user.map( u=>{return(<div>{u.name}</div>)})
+    console.log(this.props.property.item.imageURL[0])
     return (
       <PropertyDetailWrapper>
         <div>
@@ -29,28 +60,12 @@ class PropertyDetail extends Component {
           {/* <div>{test}</div> */}
           <div className='bg-dark '>
             <div id="carouselwithIndicators" class="carousel slide w-50 mx-auto" data-ride="carousel">
-              <ol class="carousel-indicators">
-                <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-                <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-                <li data-target="#carouselExampleIndicators" data-slide-to="2s"></li>
-              </ol>
               <div className="carousel-inner">
-                <div className="carousel-item active">
-                  <img class = "d-block w-100" 
-                     src = "https://www.tutorialspoint.com/bootstrap/images/slide1.png" 
-                     alt = "First slide"></img>
-                </div>
-                <div class="carousel-item">
-                  <img class="d-block w-100"
-                    src="https://www.tutorialspoint.com/bootstrap/images/slide2.png"
-                    alt="Second slide"/>
-               </div>
-
-                <div class="carousel-item">
-                  <img class="d-block w-100"
-                    src="https://www.tutorialspoint.com/bootstrap/images/slide3.png"
-                    alt="Third slide"/>
-               </div>
+              {this.props.property.item.imageURL.length==0 ? defaultCarouselItem():
+                carouselItems()
+              }
+                
+                
               </div>
               <a class="carousel-control-prev" href="#carouselwithIndicators" role="button" data-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -85,7 +100,13 @@ const PropertyDetailWrapper = styled.div`
   padding-top: 3rem;
   margin-left:25rem;
   margin-right:25rem;
-  padding-bottom: 5rem}`
+  padding-bottom: 5rem}
+ .carousel-inner img {
+  text-align:center
+}
+.carousel{
+  min-height: 700px
+}`
 
 const mapStateToProps = state => ({
   auth: state.auth,
