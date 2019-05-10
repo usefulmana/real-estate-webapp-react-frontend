@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
-
+import SearchModal from './SearchModal'
 export default class Body extends Component {
     render() {
         return (
@@ -19,7 +19,7 @@ export default class Body extends Component {
                                     <p className="card-text text-center">Find your place with an immersive photo experience and the most listings, including
                                 things you won't find anywhere else.</p>
                                     <div className="text-center">
-                                        <Link to='/'><button className="btn">Search Properties</button></Link>
+                                        <SearchModal/>
                                     </div>
                                 </div>
                             </div>

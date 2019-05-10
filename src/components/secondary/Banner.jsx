@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import BannerPhoto from '../../img/banner.jpg'
-import SearchBar from './SearchBar';
+
 export default class Banner extends Component {
   render() {
     return (

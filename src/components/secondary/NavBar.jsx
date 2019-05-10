@@ -5,7 +5,7 @@ import {connect} from 'react-redux'
 import Registration from '../main/Registration'
 import Login from '../main/Login'
 import Logout from '../main/Logout'
-import SearchBar from './SearchBar'
+
 class NavBar extends Component {
   constructor(){
     super()
