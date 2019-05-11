@@ -10,13 +10,21 @@ import Swal from "sweetalert2";
 import ProjectForm from "../secondary/ProjectForm";
 import EditProject from "../secondary/EditProject";
 import { getUserInfoByTokenAPI } from "../../data/apiroutes";
+import JwPagination from 'jw-react-pagination'
 
-const deleteURL = "http://localhost:3000/project";
 class ProjectManager extends Component {
   constructor() {
     super();
-    this.state = {};
+    this.state = {
+      pageOfItems: []
+    }
+    this.onChangePage = this.onChangePage.bind(this);
   }
+  onChangePage(pageOfItems) {
+    // update local state with new page of items
+    this.setState({ pageOfItems });
+  }
+
   componentDidMount() {
     this.fetchProjects();
   }
@@ -45,40 +53,6 @@ class ProjectManager extends Component {
     });
   }
   render() {
-    const projects = this.props.projects.map(p => (
-      <tr>
-        <td>{p.name}</td>
-        <td>{p.owner}</td>
-        <td>{p.type}</td>
-        <td>{p.totalArea}</td>
-        <td>
-          <div className="d-inline-block">
-            <EditProject project={p} />
-          </div>
-          {"     "}
-          <Button
-            outline
-            color="info"
-            size="sm"
-            data-toggle="tooltip"
-            title="View all properties belong to this project"
-          >
-            <i class="fas fa-info-circle" />
-          </Button>{" "}
-          {"     "}
-          <Button
-            outline
-            color="danger"
-            size="sm"
-            data-toggle="tooltip"
-            title="Delete"
-            onClick={this.handleDelete.bind(this, p._id)}
-          >
-            <i class="far fa-trash-alt" />
-          </Button>
-        </td>
-      </tr>
-    ));
     const { isAuthenticated, user } = this.props.auth;
     const authLinks = (
       <Fragment>
@@ -96,8 +70,46 @@ class ProjectManager extends Component {
                 <th>Actions</th>
               </tr>
             </thead>
-            <tbody>{projects}</tbody>
+            <tbody>{this.state.pageOfItems.map(p =>
+              <tr>
+                <td>{p.name}</td>
+                <td>{p.owner}</td>
+                <td>{p.type}</td>
+                <td>{p.totalArea}</td>
+                <td>
+                  <div className="d-inline-block">
+                    <EditProject project={p} />
+                  </div>
+                  {"     "}
+                  <Button
+                    outline
+                    color="info"
+                    size="sm"
+                    data-toggle="tooltip"
+                    title="View all properties belong to this project"
+                  >
+                    <i class="fas fa-info-circle" />
+                  </Button>{" "}
+                  {"     "}
+                  <Button
+                    outline
+                    color="danger"
+                    size="sm"
+                    data-toggle="tooltip"
+                    title="Delete"
+                    onClick={this.handleDelete.bind(this, p._id)}
+                  >
+                    <i class="far fa-trash-alt" />
+                  </Button>
+                </td>
+              </tr>
+            )}</tbody>
           </Table>
+          <div className="text-center">
+            <JwPagination items={this.props.projects} onChangePage={this.onChangePage} pageSize={5} />
+          </div>
+         
+       
         </div>
       </Fragment>
     );
@@ -112,6 +124,7 @@ class ProjectManager extends Component {
         <div className="project">
           {isAuthenticated ? authLinks : guestLinks}
         </div>
+     
       </ProjectManagerWrapper>
     );
   }

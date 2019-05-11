@@ -5,8 +5,9 @@ import NavBar from "../secondary/NavBar";
 import Footer from "../secondary/Footer";
 import { getPropertiesByAddress } from "../../actions/propertyActions";
 import { withRouter, Link } from "react-router-dom";
-import { Table, Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from "reactstrap";
+import { Table, Button} from "reactstrap";
 import ScrollUp from "../secondary/ScrollUp";
+import JwPagination from 'jw-react-pagination'
 
 class SearchResults extends Component {
   constructor(props) {
@@ -22,12 +23,24 @@ class SearchResults extends Component {
       maxArea: 5000,
       direction: "",
       table: "",
-      filterOn: false
+      filterOn: false,
+      pageOfItemsGrid:[],
+      pageOfItemsList:[]
     };
     this.onChange = this.onChange.bind(this);
     this.onClickGrid = this.onClickGrid.bind(this);
     this.onClickList = this.onClickList.bind(this);
     this.toggleFilter = this.toggleFilter.bind(this);
+    this.onChangePageGrid = this.onChangePageGrid.bind(this)
+    this.onChangePageList = this.onChangePageList.bind(this)
+  }
+  onChangePageGrid(pageOfItemsGrid) {
+    // update local state with new page of items
+    this.setState({ pageOfItemsGrid});
+  }
+  onChangePageList(pageOfItemsList) {
+    // update local state with new page of items
+    this.setState({ pageOfItemsList });
   }
   toggleFilter() {
     this.setState({
@@ -311,7 +324,16 @@ class SearchResults extends Component {
 
         );
       });
-
+    var viewGrid = () =>{
+      return(
+        <React.Fragment>
+                <div className="text-center">
+            <JwPagination items={propertyItemsGrid} onChangePage={this.onChangePageGrid} pageSize={10} />
+          </div>
+        </React.Fragment>
+        
+      )
+    }
     var propertyItemsList = this.props.properties.items
       .filter(p => {
         return p.price <= this.state.maxPrice && p.price >= this.state.minPrice;
@@ -329,7 +351,7 @@ class SearchResults extends Component {
         if (!this.state.direction) {
           return p;
         }
-        return p.direction == this.state.direction;
+        return p.direction === this.state.direction;
       })
       .map(p => {
         return (
@@ -364,6 +386,7 @@ class SearchResults extends Component {
         );
       });
     var tableHead = () => {
+      console.log(this.state.pageOfItemsList)
       return (
         <div className="mx-auto">
           <Table className="text-center table-responsive table-hover">
@@ -383,8 +406,40 @@ class SearchResults extends Component {
                 <th>Action</th>
               </tr>
             </thead>
-            <tbody>{propertyItemsList}</tbody>
+            <tbody>
+            {/* {this.state.pageOfItemsList.map(p=>
+              <tr>
+                <td>{p.address}</td>
+                <td>{p.city}</td>
+                <td>{p.province}</td>
+                <td>{p.price}</td>
+                <td>{p.area}</td>
+                <td>{p.numOfBedrooms}</td>
+                <td>{p.numOfBathrooms}</td>
+                <td>{p.direction}</td>
+                <td>
+                  <Link to={`/propertyDetails/${p._id}`}>
+                    {" "}
+                    <Button
+                      outline
+                      color="info"
+                      size="sm"
+                      data-toggle="tooltip"
+                      title="Details"
+                    >
+                      <i class="fas fa-info-circle" />
+                    </Button>{" "}
+                    {"     "}
+                  </Link>
+                </td>
+              </tr>
+            )} */}
+            {propertyItemsList}
+            </tbody>
           </Table>
+          {/* <div className="text-center">
+            <JwPagination items={propertyItemsList} onChangePage={this.onChangePageList} pageSize={10} />
+          </div> */}
         </div>
       );
     };

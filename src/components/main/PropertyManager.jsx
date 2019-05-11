@@ -11,11 +11,18 @@ import PropertyForm from "../secondary/PropertyForm";
 import EditProperty from "../secondary/EditProperty";
 import { Link } from "react-router-dom";
 import { getUserInfoByTokenAPI } from "../../data/apiroutes";
-
+import JwPagination from 'jw-react-pagination'
 class PropertyManager extends Component {
   constructor() {
     super();
-    this.state = {};
+    this.state = {
+      pageOfItems: []
+    };
+    this.onChangePage = this.onChangePage.bind(this);
+  }
+  onChangePage(pageOfItems) {
+    // update local state with new page of items
+    this.setState({ pageOfItems });
   }
   componentDidMount() {
     this.fetchProperties();
@@ -99,8 +106,50 @@ class PropertyManager extends Component {
                 <th>Actions</th>
               </tr>
             </thead>
-            <tbody>{properties}</tbody>
+            <tbody>
+              {this.state.pageOfItems.map(p =>
+                <tr>
+                  <td>{p.address}</td>
+                  <td>{p.city}</td>
+                  <td>{p.price}</td>
+                  <td>{p.area}</td>
+                  <td>
+                    <div className="d-inline-block">
+                      <EditProperty property={p} />
+                    </div>
+                    {"     "}
+                    <Link to={`/propertyDetails/${p._id}`}>
+                      {" "}
+                      <Button
+                        outline
+                        color="info"
+                        size="sm"
+                        data-toggle="tooltip"
+                        title="Details"
+                      >
+                        <i class="fas fa-info-circle" />
+                      </Button>{" "}
+                      {"     "}
+                    </Link>
+                    <Button
+                      outline
+                      color="danger"
+                      size="sm"
+                      data-toggle="tooltip"
+                      title="Delete"
+                      onClick={this.handleDelete.bind(this, p._id)}
+                    >
+                      <i class="far fa-trash-alt" />
+                    </Button>
+                  </td>
+                </tr>
+              )
+              }
+            </tbody>
           </Table>
+          <div className="text-center">
+            <JwPagination items={this.props.properties} onChangePage={this.onChangePage} pageSize={5} />
+          </div>
         </div>
       </Fragment>
     );

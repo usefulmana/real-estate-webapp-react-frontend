@@ -97,7 +97,6 @@ export const createProperty = (propertyData, token) => dispatch => {
         payload: property
       })
     );
-    console.log(JSON.stringify(propertyData))
 };
 export const deleteProperty = (pid, uid) => dispatch => {
   const config = {
@@ -127,6 +126,7 @@ export const updateProperty = (
   city,
   province,
   project,
+  imageURL,
   token,
   id}
 ) => dispatch => {
@@ -146,7 +146,8 @@ export const updateProperty = (
     address,
     city,
     province,
-    project
+    project,
+    imageURL
   });
   axios
     .put(`${updateAPropertyAPI}/${id}`, body, config)

@@ -7,7 +7,8 @@ import ContactCard from '../secondary/ContactCard'
 import PropertyDetailCard from '../secondary/PropertyDetailCard';
 import Footer from '../secondary/Footer'
 import NotAvailable from '../../img/NotAvailable.jpg'
-import Image from 'react-image-resizer'
+
+
 class PropertyDetail extends Component {
   constructor(props){
     super(props)
@@ -35,7 +36,7 @@ class PropertyDetail extends Component {
       return(
         <React.Fragment>
           <div className="carousel-item active">
-            <img class="d-inline-block w-100 h-100"
+            <img class="d-inline-block w-100 h-100 "
               src={this.props.property.item.imageURL[0]}
               alt="First slide"></img>
           </div>
@@ -54,17 +55,18 @@ class PropertyDetail extends Component {
     // const test = this.props.property.item.user.map( u=>{return(<div>{u.name}</div>)})
     return (
       <PropertyDetailWrapper>
+        <div className="row">
+          <NavBar />
+        </div>
         <div>
-          <NavBar/>
+        
           {/* <div>{test}</div> */}
-          <div className='bg-dark '>
+          <div className='bg-dark row pt-10'>
             <div id="carouselwithIndicators" class="carousel slide w-50 mx-auto" data-ride="carousel">
               <div className="carousel-inner">
               {this.props.property.item.imageURL.length==0 ? defaultCarouselItem():
                 carouselItems()
               }
-                
-                
               </div>
               <a class="carousel-control-prev" href="#carouselwithIndicators" role="button" data-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>

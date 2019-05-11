@@ -45,7 +45,6 @@ class PropertyForm extends Component {
     };
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
-    this.handleAddInput = this.handleAddInput.bind(this)
   }
   componentDidMount() {
     fetch(getUserInfoByTokenAPI, {
@@ -65,10 +64,7 @@ class PropertyForm extends Component {
   //     imageURLs: this.state.imageURLs.concat(e.target.value)
   //   });
   // }
-  handleAddInput (){
-    var regex = /(http(s?):)?([/|.|\w|\s|-])*\.(?:jpg|png)/g
-    let url = this.state.imageURL
-  }
+
   addImageUrlInput(){
     this.setState({imageURLs: [...this.state.imageURLs,'']})
   }
@@ -94,58 +90,68 @@ class PropertyForm extends Component {
   };
   onSubmit(e) {
     e.preventDefault();
-    // const isValid = this.validate()
-    var property = {
-      title: this.state.propertyTitle.toUpperCase(),
-      price: this.state.propertyPrice,
-      area: this.state.propertyArea,
-      numOfBedrooms: this.state.bedroom,
-      numOfBathrooms: this.state.bathroom,
-      direction: this.state.direction,
-      address: this.state.address,
-      city: this.state.city,
-      province: this.state.province,
-      user: this.state.user,
-      imageURL: this.state.imageURLs
-    };
-    console.log(property)
-    if (this.state.project) {
-      console.log(this.state.project);
-      property.project = this.state.project;
-      this.props.createProperty(property, this.props.auth.token);
-      this.setState({ project: "" });
-      Swal.fire({
-        type: "success",
-        title: "Success! Refresh to View",
-        showConfirmButton: false,
-        timer: 2000
-      });
-      setTimeout(this.toggle, 3000);
-    } else {
-      this.props.createProperty(property, this.props.auth.token);
-      Swal.fire({
-        type: "success",
-        title: "Success! Refresh to View",
-        showConfirmButton: false,
-        timer: 2000
-      });
-      setTimeout(this.toggle, 3000);
+    const isValid = this.validate()
+    if(isValid){
+      this.setState({
+        addImageError:''
+      })
+      var property = {
+        title: this.state.propertyTitle.toUpperCase(),
+        price: this.state.propertyPrice,
+        area: this.state.propertyArea,
+        numOfBedrooms: this.state.bedroom,
+        numOfBathrooms: this.state.bathroom,
+        direction: this.state.direction,
+        address: this.state.address,
+        city: this.state.city,
+        province: this.state.province,
+        user: this.state.user,
+        imageURL: this.state.imageURLs
+      };
+      if (this.state.project) {
+        property.project = this.state.project;
+        this.props.createProperty(property, this.props.auth.token);
+        this.setState({ project: "" });
+        Swal.fire({
+          type: "success",
+          title: "Success! Refresh to View",
+          showConfirmButton: false,
+          timer: 2000
+        });
+        setTimeout(this.toggle, 3000);
+      } else {
+        this.props.createProperty(property, this.props.auth.token);
+        Swal.fire({
+          type: "success",
+          title: "Success! Refresh to View",
+          showConfirmButton: false,
+          timer: 2000
+        });
+        setTimeout(this.toggle, 3000);
+      }
     }
+    
   }
-
-  // validate = () => {
-  //   let projectAreaError = ''
-
-  //   if (!this.state.projectArea || this.state.projectArea <= 0) {
-  //     projectAreaError = 'This field cannot be blank. Total area cannot be negative or equal to 0!'
-  //   }
-  //   if (projectAreaError) {
-  //     this.setState({ projectAreaError })
-  //     return false;
-  //   }
-  //   return true;
-  // }
-
+  imageURLCheck = (elem) =>{
+    return elem.endsWith('.jpg') || elem.endsWith('.png')
+  }
+  validate = () => {
+    let addImageError = ''
+    let tempArray = ''
+    tempArray = this.state.imageURLs.some(this.imageURLCheck)
+    console.log(tempArray)
+    if (!this.state.imageURLs.every(this.imageURLCheck))
+    {
+      addImageError = "Links that end with .png or .jpg only"
+    }
+    if(addImageError){
+      this.setState({
+        addImageError
+    })
+    return false;
+  }
+  return true;
+}
   render() {
     const imageForm = () =>{
       return(
@@ -354,6 +360,7 @@ class PropertyForm extends Component {
                     
                   )
                 })}
+                <div className="ml-1 mb-1" style={{ fontSize: 12, color: "red" }}>{this.state.addImageError}</div>
                 <Button
                   outline
                   color="success"
@@ -363,7 +370,7 @@ class PropertyForm extends Component {
                   onClick={(e) => this.addImageUrlInput(e)}
                 >
                   <i className="fas fa-plus"></i>{' '}Add Image
-                    </Button>
+                </Button>
                 
                 <button
                   className="btn btn-lg btn-primary btn-block text-uppercase"

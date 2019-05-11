@@ -39,7 +39,8 @@ class EditProperty extends Component {
             project: '',
             user: '',
             id:'',
-            token:''
+            token:'',
+            addImageError:''
         }
         this.onChange = this.onChange.bind(this)
         this.onSubmit = this.onSubmit.bind(this)
@@ -51,6 +52,22 @@ class EditProperty extends Component {
     //         }
     //     }).then(res => res.json()).then(json => this.setState({ user: json._id }));
     // }
+    addImageUrlInput() {
+        this.setState({ imageURLs: [...this.state.imageURLs, ''] })
+    }
+    handleImageUrlChange(e, index) {
+        this.state.imageURLs[index] = e.target.value
+        this.setState({ imageURLs: this.state.imageURLs })
+    }
+    handleRemove(index) {
+        this.state.imageURLs.splice(index, 1)
+
+        console.log(this.state.imageURLs)
+
+        this.setState({
+            imageURLs: this.state.imageURLs
+        })
+    }
     onChange(e) {
         this.setState({ [e.target.name]: e.target.value });
     }
@@ -71,6 +88,7 @@ class EditProperty extends Component {
         city,
         province,
         project,
+        imageURLs
      ) {
         this.setState({
             propertyID: id,
@@ -83,64 +101,77 @@ class EditProperty extends Component {
             address: address,
             city: city,
             province: province,
-            project:project
+            project:project,
+            imageURLs : imageURLs,
+            addImageError:''
         })
         this.toggle();
     }
     onSubmit(e) {
         e.preventDefault()
-        // const isValid = this.validate()
-        var property = {
-            title: this.state.propertyTitle.toUpperCase(),
-            price: this.state.propertyPrice,
-            area: this.state.propertyArea,
-            numOfBedrooms: this.state.bedroom,
-            numOfBathrooms: this.state.bathroom,
-            direction: this.state.direction,
-            address: this.state.address,
-            city: this.state.city,
-            province: this.state.province,
-            token: this.props.auth.token,
-            id: this.state.propertyID
+        const isValid = this.validate()
+        if(isValid){
+
+            var property = {
+                title: this.state.propertyTitle.toUpperCase(),
+                price: this.state.propertyPrice,
+                area: this.state.propertyArea,
+                numOfBedrooms: this.state.bedroom,
+                numOfBathrooms: this.state.bathroom,
+                direction: this.state.direction,
+                address: this.state.address,
+                city: this.state.city,
+                province: this.state.province,
+                token: this.props.auth.token,
+                id: this.state.propertyID,
+                imageURL: this.state.imageURLs
+            }
+            if (this.state.project) {
+                property.project = this.state.project
+                console.log(property)
+                this.props.updateProperty(property)
+                this.setState({ project: '' })
+                Swal.fire({
+                    type: "success",
+                    title: "Success! Refresh to View",
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+                setTimeout(this.toggle, 3000)
+            }
+            else {
+                this.props.updateProperty(property, this.props.auth.token, this.props.property._id)
+                Swal.fire({
+                    type: "success",
+                    title: "Success! Refresh to View",
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+                setTimeout(this.toggle, 3000)
+            }
         }
-        if (this.state.project) {
-            property.project = this.state.project
-            console.log(property)
-            this.props.updateProperty(property)
-            this.setState({ project: '' })
-            Swal.fire({
-                type: "success",
-                title: "Success! Refresh to View",
-                showConfirmButton: false,
-                timer: 2000
-            });
-            setTimeout(this.toggle,3000)
-        }
-        else {
-            this.props.updateProperty(property, this.props.auth.token, this.props.property._id)
-            Swal.fire({
-                type: "success",
-                title: "Success! Refresh to View",
-                showConfirmButton: false,
-                timer: 2000
-            });
-            setTimeout(this.toggle, 3000)
-        }
+        
     }
 
-    // validate = () => {
-    //   let projectAreaError = ''
-
-    //   if (!this.state.projectArea || this.state.projectArea <= 0) {
-    //     projectAreaError = 'This field cannot be blank. Total area cannot be negative or equal to 0!'
-    //   }
-    //   if (projectAreaError) {
-    //     this.setState({ projectAreaError })
-    //     return false;
-    //   }
-    //   return true;
-    // }
-
+    imageURLCheck = (elem) => {
+        return elem.endsWith('.jpg') || elem.endsWith('.png')
+    }
+    validate = () => {
+        let addImageError = ''
+        let tempArray = ''
+        tempArray = this.state.imageURLs.some(this.imageURLCheck)
+        console.log(tempArray)
+        if (!this.state.imageURLs.every(this.imageURLCheck)) {
+            addImageError = "Links that end with .png or .jpg only"
+        }
+        if (addImageError) {
+            this.setState({
+                addImageError
+            })
+            return false;
+        }
+        return true;
+    }
     render() {
         const directions = ['North', 'East', 'South', 'West', 'Northwest', 'Northeast', 'Southwest', 'Southeast']
         const directionChoices = directions.map(d => { return (<option value={d}>{d}</option>) })
@@ -149,7 +180,7 @@ class EditProperty extends Component {
             <NewPropertyFormWrapper>
                 <Button outline color='success'
                     onClick={this.handleEdit.bind(this, this.props.property._id, this.props.property.title, this.props.property.price, this.props.property.area, this.props.property.numOfBedrooms,
-                        this.props.property.numOfBathrooms, this.props.property.direction, this.props.property.address, this.props.property.city, this.props.property.province, this.props.property.project)}
+                        this.props.property.numOfBathrooms, this.props.property.direction, this.props.property.address, this.props.property.city, this.props.property.province, this.props.property.project, this.props.property.imageURL)}
                     outline color="primary" size='sm' data-toggle="tooltip" title="Edit"><i class="far fa-edit"></i></Button>
                 <Modal isOpen={this.state.modal} toggle={this.toggle}>
                     <ModalHeader toggle={this.toggle} className="mx-auto">
@@ -285,6 +316,48 @@ class EditProperty extends Component {
                                         </Input>
                                     </Col>
                                 </Row>
+                               
+                                {this.state.imageURLs.map((imageURL, index) => {
+                                    return (
+                                        <Row className="button" form key={index}>
+                                            <Col md={9}>
+                                                <Input
+                                                    type="url"
+                                                    name={imageURL}
+                                                    className=" mb-3"
+                                                    placeholder="Image Link"
+                                                    onChange={(e) => this.handleImageUrlChange(e, index)}
+                                                    value={imageURL}
+                                                />
+                                            </Col>
+                                            <Col md={3}>
+                                                <Button
+                                                    outline
+                                                    color="danger"
+                                                    size="sm"
+                                                    title="Remove"
+                                                    className="mt-1"
+                                                    onClick={(index) => this.handleRemove(index)}
+                                                >
+                                                    <i class="fas fa-minus"></i>
+                                                </Button>
+                                            </Col>
+                                        </Row>
+
+                                    )
+                                })}
+
+                                <div className="ml-1 mb-1" style={{ fontSize: 12, color: "red" }}>{this.state.addImageError}</div>
+                                <Button
+                                    outline
+                                    color="success"
+                                    size="sm"
+                                    title="Add More"
+                                    className="mb-3"
+                                    onClick={(e) => this.addImageUrlInput(e)}
+                                >
+                                    <i className="fas fa-plus"></i>{' '}Add Image
+                            </Button>
                                 <button
                                     className="btn btn-lg btn-primary btn-block text-uppercase"
                                     type="submit"
