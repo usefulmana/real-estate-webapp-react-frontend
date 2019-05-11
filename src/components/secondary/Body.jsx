@@ -11,7 +11,6 @@ export default class Body extends Component {
                 <div className="row">
                     <div className="card-deck">
                         <div class="col-12 col-sm-6 col-lg-3 ml-auto">
-
                             <div className="card">
                                 <img src="https://s.zillowstatic.com/homepage/static/Buy_a_home.png" className="card-img-top" alt="Buy a house" />
                                 <div className="card-block">
@@ -19,7 +18,9 @@ export default class Body extends Component {
                                     <p className="card-text text-center">Find your place with an immersive photo experience and the most listings, including
                                 things you won't find anywhere else.</p>
                                     <div className="text-center">
-                                        <SearchModal/>
+                                        <Link to='/all'>
+                                            <button className="btn">View All Properties</button>
+                                        </Link>
                                     </div>
                                 </div>
                             </div>

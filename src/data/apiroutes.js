@@ -1,20 +1,27 @@
-export const getAllPropertiesAPI = 'http://localhost:3000/property'
-export const getPropertyByIdAPI = 'http://localhost:3000/property/byId'
-export const getPropertiesByAddressAPI = 'http://localhost:3000/property/byAddress'
-export const addAPropertyAPI = 'http://localhost:3000/property'
-export const deleteAPropertyAPI = 'http://localhost:3000/property'
-export const updateAPropertyAPI = 'http://localhost:3000/property'
+export const getAllPropertiesAPI =
+  'https://express-estate.herokuapp.com/property';
+export const getPropertyByIdAPI =
+  'https://express-estate.herokuapp.com/property/byId';
+export const getPropertiesByAddressAPI =
+  'https://express-estate.herokuapp.com/property/byAddress';
+export const addAPropertyAPI = 'https://express-estate.herokuapp.com/property';
+export const deleteAPropertyAPI =
+  'https://express-estate.herokuapp.com/property';
+export const updateAPropertyAPI =
+  'https://express-estate.herokuapp.com/property';
 
-export const getAllProjectsAPI = 'http://localhost:3000/project'
-export const getProjectByIdAPI = 'http://localhost:3000/project/byId'
-export const getProjectsByNameAPI = 'http://localhost:3000/byName'
-export const addAProjectAPI = 'http://localhost:3000/project'
-export const updateAProjectAPI = 'http://localhost:3000/project'
-export const deleteAProjectAPI = 'http://localhost:3000/project'
+export const getAllProjectsAPI = 'https://express-estate.herokuapp.com/project';
+export const getProjectByIdAPI =
+  'https://express-estate.herokuapp.com/project/byId';
+export const getProjectsByNameAPI =
+  'https://express-estate.herokuapp.com/byName';
+export const addAProjectAPI = 'https://express-estate.herokuapp.com/project';
+export const updateAProjectAPI = 'https://express-estate.herokuapp.com/project';
+export const deleteAProjectAPI = 'https://express-estate.herokuapp.com/project';
 
-
-export const getUserByIdAPI = 'http://localhost:3000/user'
-export const getUserInfoByTokenAPI = 'http://localhost:3000/auth/user'
-export const registerAPI = 'http://localhost:3000/user'
-export const loginAPI = 'http://localhost:3000/auth'
-export const updateUserInfoAPI = 'http://localhost:3000/user'
+export const getUserByIdAPI = 'https://express-estate.herokuapp.com/user';
+export const getUserInfoByTokenAPI =
+  'https://express-estate.herokuapp.com/auth/user';
+export const registerAPI = 'https://express-estate.herokuapp.com/user';
+export const loginAPI = 'https://express-estate.herokuapp.com/auth';
+export const updateUserInfoAPI = 'https://express-estate.herokuapp.com/user';

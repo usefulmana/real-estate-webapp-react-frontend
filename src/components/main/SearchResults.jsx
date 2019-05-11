@@ -5,15 +5,13 @@ import NavBar from "../secondary/NavBar";
 import Footer from "../secondary/Footer";
 import { getPropertiesByAddress } from "../../actions/propertyActions";
 import { withRouter, Link } from "react-router-dom";
-import { Table, Button} from "reactstrap";
 import ScrollUp from "../secondary/ScrollUp";
-import JwPagination from 'jw-react-pagination'
-
+import InfiniteScroll from 'react-infinite-scroller'
 class SearchResults extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isGrid: true,
+      isGrid:true,
       isList: false,
       minPrice: 0,
       maxPrice: 50000000,
@@ -31,17 +29,9 @@ class SearchResults extends Component {
     this.onClickGrid = this.onClickGrid.bind(this);
     this.onClickList = this.onClickList.bind(this);
     this.toggleFilter = this.toggleFilter.bind(this);
-    this.onChangePageGrid = this.onChangePageGrid.bind(this)
-    this.onChangePageList = this.onChangePageList.bind(this)
+   
   }
-  onChangePageGrid(pageOfItemsGrid) {
-    // update local state with new page of items
-    this.setState({ pageOfItemsGrid});
-  }
-  onChangePageList(pageOfItemsList) {
-    // update local state with new page of items
-    this.setState({ pageOfItemsList });
-  }
+
   toggleFilter() {
     this.setState({
       filterOn: !this.state.filterOn
@@ -66,39 +56,12 @@ class SearchResults extends Component {
       isList: true
     });
   }
-  // filterProperty = () =>{
-  //   let filteredProperties = this.props.properties.items
-  //   filteredProperties = filteredProperties.filter(p=>{
-  //      return (p.price <= this.state.maxPrice && p.price >= this.state.minPrice)
-  //   })
-  //   filteredProperties = filteredProperties.filter(p => {
-  //     return (p.numOfBedrooms >= this.state.bedroom)
-  //   })
-  //   filteredProperties = filteredProperties.filter(p => {
-  //     return (p.numOfBathrooms >= this.state.bathroom)
-  //   })
-  //   filteredProperties = filteredProperties.filter(p => {
-  //     return (p.area <= this.state.maxArea && p.area >= this.state.minArea)
-  //   })
-  //   filteredProperties = filteredProperties.filter(p => {
-  //     if(!this.state.direction){
-  //       return filteredProperties
-  //     }
-  //     return (p.direction == this.state.direction)
-  //   })
-  //   this.setState({
-  //     filteredProperties
-  //   })
-  // }
+  
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
     this.forceUpdate();
   }
-  // componentWillReceiveProps(nextProps) {
-  //   if (this.props.match.params.query !== nextProps.match.params.query) {
-  //     this.props.getPropertiesByAddress(nextProps.match.params.id);
-  //   }
-  // }
+
   render() {
     if (!this.props.properties.items) {
       return null;
@@ -295,7 +258,7 @@ class SearchResults extends Component {
               to={`/propertyDetails/${p._id}`}
               style={{ textDecoration: "none" }}
             >
-              <div class="card text-dark property-card">
+              <div class="card text-dark property-card ">
                 {p.imageURL.length === 0 ? <img class="card-img-top" src='http://www.cbkhardware.com/pub/media/catalog/product/placeholder/default/noimage-1.png' alt="Card image cap" />
                   : <img class="card-img-top" src={p.imageURL[0]} alt="Card image cap" />}
                 <div class="card-body">
@@ -324,16 +287,6 @@ class SearchResults extends Component {
 
         );
       });
-    var viewGrid = () =>{
-      return(
-        <React.Fragment>
-                <div className="text-center">
-            <JwPagination items={propertyItemsGrid} onChangePage={this.onChangePageGrid} pageSize={10} />
-          </div>
-        </React.Fragment>
-        
-      )
-    }
     var propertyItemsList = this.props.properties.items
       .filter(p => {
         return p.price <= this.state.maxPrice && p.price >= this.state.minPrice;
@@ -356,93 +309,43 @@ class SearchResults extends Component {
       .map(p => {
         return (
           // <Link to={`/propertyDetails/${p._id}`} style={{ textDecoration: 'none' }} className='text-muted'>
-          <tr>
-            <td>{p.address}</td>
-            <td>{p.city}</td>
-            <td>{p.province}</td>
-            <td>{p.price}</td>
-            <td>{p.area}</td>
-            <td>{p.numOfBedrooms}</td>
-            <td>{p.numOfBathrooms}</td>
-            <td>{p.direction}</td>
-            <td>
-              <Link to={`/propertyDetails/${p._id}`}>
-                {" "}
-                <Button
-                  outline
-                  color="info"
-                  size="sm"
-                  data-toggle="tooltip"
-                  title="Details"
-                >
-                  <i class="fas fa-info-circle" />
-                </Button>{" "}
-                {"     "}
-              </Link>
-            </td>
-          </tr>
-
-          // </Link>
+          <React.Fragment>
+              <div className="col-9 mb-2 mx-auto">
+              <Link
+                to={`/propertyDetails/${p._id}`}
+                style={{ textDecoration: "transparent" }}
+                className='text-muted'
+              >
+                <div className="card">
+                  <div className="card-horizontal">
+                    {p.imageURL.length === 0 ? <img className="card-img-top card-image" src='http://www.cbkhardware.com/pub/media/catalog/product/placeholder/default/noimage-1.png' alt="Card image cap" />
+                      : <img className="card-img-top card-image" src={p.imageURL[0]} alt="Card image cap" />}
+                    <div className="card-body ml-5">
+                      <div className="row">
+                        <div>
+                        <p className="card-title ml-10 mt-1" style={{ fontSize: 20, color:'red' }}>{p.title}</p>
+                      </div>
+                      <div  style={{ fontSize: 15 }} className="ml-auto">
+                        <div class="vl d-inline-block">  <p className="ml-3 text-center"><strong>{p.numOfBedrooms}</strong> <br /> Beds</p></div>
+                        <div class="vl d-inline-block">  <p className="ml-3 text-center"><strong>{p.numOfBathrooms}</strong> <br /> Bath</p></div>
+                        <div class="vl d-inline-block">  <p className="ml-3 text-center"><strong>{p.area}</strong> <br />sqm</p></div>
+                      </div>
+                      </div>
+                      <div className="row mb-3" style={{ fontSize: 20, color: 'black' }}>${' '}{p.price}</div>
+                      <div className="row">
+                        <p>{p.address}{', '}{p.city}{', '}{p.province}</p>
+                      </div>
+                    </div>
+                    
+                  </div>
+                </div>
+              </Link> 
+              </div>
+               
+          </React.Fragment>
         );
       });
-    var tableHead = () => {
-      console.log(this.state.pageOfItemsList)
-      return (
-        <div className="mx-auto">
-          <Table className="text-center table-responsive table-hover">
-            <caption>{`List of Properties matching your query: ${
-              this.props.match.params.query
-              }`}</caption>
-            <thead className="thead-light">
-              <tr>
-                <th>Address</th>
-                <th>City / Town</th>
-                <th>Province / State</th>
-                <th>Price</th>
-                <th>Area</th>
-                <th>Bedrooms</th>
-                <th>Bathrooms</th>
-                <th>Direction</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-            {/* {this.state.pageOfItemsList.map(p=>
-              <tr>
-                <td>{p.address}</td>
-                <td>{p.city}</td>
-                <td>{p.province}</td>
-                <td>{p.price}</td>
-                <td>{p.area}</td>
-                <td>{p.numOfBedrooms}</td>
-                <td>{p.numOfBathrooms}</td>
-                <td>{p.direction}</td>
-                <td>
-                  <Link to={`/propertyDetails/${p._id}`}>
-                    {" "}
-                    <Button
-                      outline
-                      color="info"
-                      size="sm"
-                      data-toggle="tooltip"
-                      title="Details"
-                    >
-                      <i class="fas fa-info-circle" />
-                    </Button>{" "}
-                    {"     "}
-                  </Link>
-                </td>
-              </tr>
-            )} */}
-            {propertyItemsList}
-            </tbody>
-          </Table>
-          {/* <div className="text-center">
-            <JwPagination items={propertyItemsList} onChangePage={this.onChangePageList} pageSize={10} />
-          </div> */}
-        </div>
-      );
-    };
+    
 
     return (
       <SearchResultsWrapper>
@@ -478,8 +381,8 @@ class SearchResults extends Component {
         </div>
             {this.state.filterOn ? filter():null}
         <div className="row margin mt-5">
-
-          {this.state.isGrid ? propertyItemsGrid : tableHead()}
+              
+          {this.state.isGrid ? propertyItemsGrid : propertyItemsList}
 
         </div>
         <ScrollUp />
@@ -490,6 +393,22 @@ class SearchResults extends Component {
 }
 
 const SearchResultsWrapper = styled.div`
+.vl {
+ margin-right:1rem;
+  border-left: 1px solid #6C757D;
+  height: 2.5rem;
+}
+.card-horizontal {
+    display: flex;
+    flex: 1 1 auto;
+}
+.card-horizontal:hover {
+    transform : scale(1.02)
+}
+.card-image{
+  width:300px;
+  height: 180px
+}
   .views {
     margin-top: 3.5rem;
     padding: 1rem;
@@ -513,16 +432,14 @@ const SearchResultsWrapper = styled.div`
   }
 
   .property-card{
-    min-width: 340px;
-    min-height: 400px;
-    max-height: 400px;
-    max-width: 340px;
+    width: 340px;
+    height: 400px;
   }
   .property-card:hover {
     transform: scale(1.05);
   }
   .margin {
-    margin-bottom: 12rem;
+    margin-bottom: 7rem;
     margin-left: 10rem;
     margin-right: 10rem;
   }
