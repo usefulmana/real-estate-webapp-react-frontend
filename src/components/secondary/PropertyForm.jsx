@@ -4,8 +4,8 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { clearErrors } from "../../actions/errorActions";
 import { createProperty } from "../../actions/propertyActions";
-import { getProjects } from "../../actions/projectActions";
 import Swal from "sweetalert2";
+import { getProjects } from '../../actions/projectActions';
 import {
   Button,
   Modal,
@@ -19,7 +19,7 @@ import {
   Col
 } from "reactstrap";
 
-import { getUserInfoByTokenAPI } from "./../../data/apiroutes";
+import { getUserInfoByTokenAPI, getAllProjectsAPI } from "./../../data/apiroutes";
 
 class PropertyForm extends Component {
   constructor(props) {
@@ -41,7 +41,8 @@ class PropertyForm extends Component {
       user: "",
       urlCount:'',
       addImage:false,
-      addImageError:""
+      addImageError:"",
+    
     };
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -54,16 +55,14 @@ class PropertyForm extends Component {
     })
       .then(res => res.json())
       .then(json => this.setState({ user: json._id }));
+     
+      this.props.getProjects()
   }
+ 
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
   }
-  // onChangeImageURL(e) {
-   
-  //   this.setState( {
-  //     imageURLs: this.state.imageURLs.concat(e.target.value)
-  //   });
-  // }
+ 
 
   addImageUrlInput(){
     this.setState({imageURLs: [...this.state.imageURLs,'']})
@@ -268,7 +267,7 @@ class PropertyForm extends Component {
                   onChange={this.onChange}
                 >
                   <option value="" selected>
-                    Project
+                    Project (None)
                   </option>
                   {projects}
                 </Input>
@@ -279,6 +278,7 @@ class PropertyForm extends Component {
                       name="propertyPrice"
                       className="mb-3 w-10"
                       min="0"
+                      max="50000000"
                       placeholder="Price in USD"
                       onChange={this.onChange}
                       required
@@ -443,12 +443,13 @@ const NewPropertyFormWrapper = styled.div`
   .btn-danger {
     background: #f93838 !important;
   }
+
 `;
 const mapStateToProps = state => ({
   auth: state.auth,
-  projects: state.projects.items
+  projects: state.projects.allProjects
 });
 export default connect(
   mapStateToProps,
-  { createProperty, clearErrors, getProjects }
+  { createProperty, clearErrors,getProjects}
 )(PropertyForm);

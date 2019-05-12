@@ -10,6 +10,7 @@ import {
 
 const initialState = {
   items: [],
+  allProjects: [],
   item: {}
 };
 
@@ -18,7 +19,7 @@ export default function(state = initialState, action) {
     case GET_PROJECTS:
       return {
         ...state,
-        items: action.payload
+        allProjects: action.payload
       };
     case GET_PROJECTS_BY_USER_ID:
       return {

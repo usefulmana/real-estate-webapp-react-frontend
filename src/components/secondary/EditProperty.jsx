@@ -18,6 +18,7 @@ import {
     Row,
     Col
 } from 'reactstrap';
+import { getAllProjectsAPI } from '../../data/apiroutes';
 
 class EditProperty extends Component {
 
@@ -45,13 +46,11 @@ class EditProperty extends Component {
         this.onChange = this.onChange.bind(this)
         this.onSubmit = this.onSubmit.bind(this)
     }
-    // componentDidMount() {
-    //     fetch('http://localhost:3000/auth/user', {
-    //         headers: {
-    //             'x-auth-token': `${this.props.auth.token}`
-    //         }
-    //     }).then(res => res.json()).then(json => this.setState({ user: json._id }));
-    // }
+    componentDidMount() {
+      
+        this.props.getProjects()
+    }
+
     addImageUrlInput() {
         this.setState({ imageURLs: [...this.state.imageURLs, ''] })
     }
@@ -103,7 +102,8 @@ class EditProperty extends Component {
             province: province,
             project:project,
             imageURLs : imageURLs,
-            addImageError:''
+            addImageError:'',
+            projects:[]
         })
         this.toggle();
     }
@@ -152,7 +152,7 @@ class EditProperty extends Component {
         }
         
     }
-
+ 
     imageURLCheck = (elem) => {
         return elem.endsWith('.jpg') || elem.endsWith('.png')
     }
@@ -172,7 +172,11 @@ class EditProperty extends Component {
         }
         return true;
     }
+    
     render() {
+        
+        if (!this.props.projects) {return null}
+        console.log(this.state.projects)
         const directions = ['North', 'East', 'South', 'West', 'Northwest', 'Northeast', 'Southwest', 'Southeast']
         const directionChoices = directions.map(d => { return (<option value={d}>{d}</option>) })
         const projects = this.props.projects.map(p => { return (<option value={p._id}>{p.name}</option>) })
@@ -250,7 +254,7 @@ class EditProperty extends Component {
                                     value={this.state.project}
                                     onChange={this.onChange}
                                 >
-                                    <option value='' selected>Project</option>
+                                    <option value='' selected>Project (None)</option>
                                     {projects}
                                 </Input>
                                 <Row form>
@@ -260,6 +264,7 @@ class EditProperty extends Component {
                                             name="propertyPrice"
                                             className="mb-3 w-10"
                                             min='0'
+                                            max="50000000"
                                             placeholder="Price in USD"
                                             value={this.state.propertyPrice}
                                             onChange={this.onChange}
@@ -424,9 +429,10 @@ const NewPropertyFormWrapper = styled.div`
     background: #f93838 !important;
   }
 
+
 `
 const mapStateToProps = state => ({
     auth: state.auth,
-    projects: state.projects.items
+    projects: state.projects.allProjects
 })
-export default connect(mapStateToProps, { updateProperty, clearErrors, getProjects })(EditProperty)
+export default connect(mapStateToProps, { updateProperty, clearErrors, getProjects})(EditProperty)
