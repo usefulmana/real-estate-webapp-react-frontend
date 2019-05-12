@@ -5,7 +5,17 @@ import PropertyManager from './PropertyManager';
 import ProjectManager from './ProjectManager';
 import Footer  from '../secondary/Footer'
 import UserCard from '../secondary/UserCard';
-export default class Dashboard extends Component {
+import {connect} from 'react-redux'
+class Dashboard extends Component {
+  componentDidMount() {
+    window.scrollTo(0, 0)
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if(this.props.auth.isAuthenticated == true && prevProps.auth.isAuthenticated == false){
+      window.location.reload()
+    }
+  }
   render() {
     return (
       <DashboardWrapper>
@@ -48,3 +58,7 @@ const DashboardWrapper = styled.div`
   margin-bottom: 20rem;
 }
 `
+const mapStateToProps = state => ({
+  auth: state.auth
+});
+export default connect(mapStateToProps,{})(Dashboard)

@@ -18,7 +18,7 @@ export default class Body extends Component {
                                     <p className="card-text text-center">Find your place with an immersive photo experience and the most listings, including
                                 things you won't find anywhere else.</p>
                                     <div className="text-center">
-                                        <Link to='/all'>
+                                        <Link to='/results/'>
                                             <button className="btn">View All Properties</button>
                                         </Link>
                                     </div>

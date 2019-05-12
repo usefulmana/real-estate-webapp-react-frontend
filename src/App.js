@@ -15,7 +15,7 @@ import store from './store';
 import Dashboard from './components/main/Dashboard';
 import { loadUser } from './actions/authActions';
 import Test from './components/main/Test';
-import All from './components/main/All';
+
 
 
 class App extends Component {
@@ -30,10 +30,9 @@ class App extends Component {
             <Route exact path="/" component={Home} />
             <Route path="/propertyDetails/:id" component={PropertyDetail} />
             <Route path="/projectDetails/:id" component={ProjectDetail} />
-            <Route path="/results/:query" component={(props) => (
+            <Route path="/results/:query?" component={(props) => (
               <SearchResults timestamp={new Date().toString()} {...props} />
             )}/>
-            <Route exact path='/all' component={All}/>
             <Route exact path="/propertyManager" component={PropertyManager} />
             <Route exact path="/projectManager" component={ProjectManager} />
             <Route exact path="/newProperty" component={PropertyForm} />

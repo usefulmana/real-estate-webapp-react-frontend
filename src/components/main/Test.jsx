@@ -25,6 +25,8 @@ class Test extends Component {
       filterOn: false,
       pageOfItems: [],
       exampleItems: [...Array(10).keys()].map(i => ({ id: (i + 1), name: 'Item ' + (i + 1) })),
+      currentPage:1,
+      itemsPerPage: 6
     
     };
     
@@ -33,12 +35,17 @@ class Test extends Component {
     this.onClickList = this.onClickList.bind(this);
     this.toggleFilter = this.toggleFilter.bind(this);
     this.onChangePage = this.onChangePage.bind(this);
+    this.onClickPageNumber = this.onClickPageNumber.bind(this)
   }
   onChangePage(pageOfItems) {
     // update local state with new page of items
     this.setState({ pageOfItems });
   }
-
+onClickPageNumber(e){
+  this.setState({
+    currentPage : Number(e.target.id)
+  })
+}
   toggleFilter() {
     this.setState({
       filterOn: !this.state.filterOn
@@ -238,8 +245,9 @@ class Test extends Component {
 
     const directionChoices = directions.map(d => {
       return <option value={d}>{d}</option>;
-    });
-    var propertyItemsGrid = this.props.properties.items
+    })
+
+    var items = this.props.properties.items
       .filter(p => {
         return p.price <= this.state.maxPrice && p.price >= this.state.minPrice;
       })
@@ -258,129 +266,105 @@ class Test extends Component {
         }
         return p.direction === this.state.direction;
       })
-      .map(p => {
-        return (
-          <div className="col-3">
+     
+    const indexOfLastProperties = this.state.currentPage * this.state.itemsPerPage
+    const indexOfFirstProperties = indexOfLastProperties - this.state.itemsPerPage
+    const currentItems = items.slice(indexOfFirstProperties, indexOfLastProperties)
+    const renderCurrentItemsGrid = currentItems.map(p => {
+      return (
+        <div className="col-3">
+          <Link
+            to={`/propertyDetails/${p._id}`}
+            style={{ textDecoration: "none" }}
+          >
+            <div class="card text-dark property-card">
+              {p.imageURL.length === 0 ? <img class="card-img-top img-grid" src='http://www.cbkhardware.com/pub/media/catalog/product/placeholder/default/noimage-1.png' alt="Card image cap" />
+                : <img class="card-img-top img-grid" src={p.imageURL[0]} alt="Card image cap" />}
+              <div class="card-body">
+                <h5 class="card-title">{p.title}</h5>
+                <p class="card-text">${p.price}</p>
+                <hr />
+                <div className="row text-muted text-left icon mt-1 mb-2">
+                  <span className="fas fa-bed" title="Bedrooms">
+                    {" "}
+                    {!p.numOfBedrooms ? "Not Avail." : p.numOfBedrooms}
+                  </span>
+                  <span className="fas fa-shower" title="Bathrooms">
+                    {" "}
+                    {!p.numOfBathrooms ? "Not Avail." : p.numOfBathrooms}
+                  </span>
+                  <span className="fas fa-ruler-combined" title="Area">
+                    {" "}
+                    {p.area}
+                  </span>
+                </div>
+                <p className="text-muted text-left address">{p.address}</p>
+              </div>
+            </div>
+          </Link>
+          <br />
+          <br />
+        </div>
+
+
+      );
+    });
+    const renderCurrentItemsList = currentItems.map(p => {
+      return (
+        // <Link to={`/propertyDetails/${p._id}`} style={{ textDecoration: 'none' }} className='text-muted'>
+        <React.Fragment>
+          <div className="col-9 mb-2 mx-auto">
             <Link
               to={`/propertyDetails/${p._id}`}
-              style={{ textDecoration: "none" }}
+              style={{ textDecoration: "transparent" }}
+              className='text-muted'
             >
-              <div class="card text-dark property-card">
-                {p.imageURL.length === 0 ? <img class="card-img-top img-grid" src='http://www.cbkhardware.com/pub/media/catalog/product/placeholder/default/noimage-1.png' alt="Card image cap" />
-                  : <img class="card-img-top img-grid" src={p.imageURL[0]} alt="Card image cap" />}
-                <div class="card-body">
-                  <h5 class="card-title">{p.title}</h5>
-                  <p class="card-text">${p.price}</p>
-                  <hr />
-                  <div className="row text-muted text-left icon mt-1 mb-2">
-                    <span className="fas fa-bed" title="Bedrooms">
-                      {" "}
-                      {!p.numOfBedrooms ? "Not Avail." : p.numOfBedrooms}
-                    </span>
-                    <span className="fas fa-shower" title="Bathrooms">
-                      {" "}
-                      {!p.numOfBathrooms ? "Not Avail." : p.numOfBathrooms}
-                    </span>
-                    <span className="fas fa-ruler-combined" title="Area">
-                      {" "}
-                      {p.area}
-                    </span>
+              <div className="card">
+                <div className="card-horizontal">
+                  {p.imageURL.length === 0 ? <img className="card-img-top card-image" src='http://www.cbkhardware.com/pub/media/catalog/product/placeholder/default/noimage-1.png' alt="Card image cap" />
+                    : <img className="card-img-top card-image" src={p.imageURL[0]} alt="Card image cap" />}
+                  <div className="card-body ml-5">
+                    <div className="row">
+                      <div>
+                        <p className="card-title ml-10 mt-1" style={{ fontSize: 20, color: 'red' }}>{p.title}</p>
+                      </div>
+                      <div style={{ fontSize: 15 }} className="ml-auto">
+                        <div class="vl d-inline-block">  <p className="ml-3 text-center"><strong>{p.numOfBedrooms}</strong> <br /> Beds</p></div>
+                        <div class="vl d-inline-block">  <p className="ml-3 text-center"><strong>{p.numOfBathrooms}</strong> <br /> Bath</p></div>
+                        <div class="vl d-inline-block">  <p className="ml-3 text-center"><strong>{p.area}</strong> <br />sqm</p></div>
+                      </div>
+                    </div>
+                    <div className="row mb-3" style={{ fontSize: 20, color: 'black' }}>${' '}{p.price}</div>
+                    <div className="row">
+                      <p>{p.address}{', '}{p.city}{', '}{p.province}</p>
+                    </div>
                   </div>
-                  <p className="text-muted text-left address">{p.address}</p>
+
                 </div>
               </div>
             </Link>
-            <br />
-            <br />
           </div>
 
-
-        );
-      });
-    var propertyItemsList = this.props.properties.items
-      .filter(p => {
-        return p.price <= this.state.maxPrice && p.price >= this.state.minPrice;
-      })
-      .filter(p => {
-        return p.numOfBedrooms >= this.state.bedroom;
-      })
-      .filter(p => {
-        return p.numOfBathrooms >= this.state.bathroom;
-      })
-      .filter(p => {
-        return p.area <= this.state.maxArea && p.area >= this.state.minArea;
-      })
-      .filter(p => {
-        if (!this.state.direction) {
-          return p;
-        }
-        return p.direction === this.state.direction;
-      })
-      .map(p => {
-        return (
-          // <Link to={`/propertyDetails/${p._id}`} style={{ textDecoration: 'none' }} className='text-muted'>
-          <React.Fragment>
-            <div className="col-9 mb-2 mx-auto">
-              <Link
-                to={`/propertyDetails/${p._id}`}
-                style={{ textDecoration: "transparent" }}
-                className='text-muted'
-              >
-                <div className="card">
-                  <div className="card-horizontal">
-                    {p.imageURL.length === 0 ? <img className="card-img-top card-image" src='http://www.cbkhardware.com/pub/media/catalog/product/placeholder/default/noimage-1.png' alt="Card image cap" />
-                      : <img className="card-img-top card-image" src={p.imageURL[0]} alt="Card image cap" />}
-                    <div className="card-body ml-5">
-                      <div className="row">
-                        <div>
-                          <p className="card-title ml-10 mt-1" style={{ fontSize: 20, color: 'red' }}>{p.title}</p>
-                        </div>
-                        <div style={{ fontSize: 15 }} className="ml-auto">
-                          <div class="vl d-inline-block">  <p className="ml-3 text-center"><strong>{p.numOfBedrooms}</strong> <br /> Beds</p></div>
-                          <div class="vl d-inline-block">  <p className="ml-3 text-center"><strong>{p.numOfBathrooms}</strong> <br /> Bath</p></div>
-                          <div class="vl d-inline-block">  <p className="ml-3 text-center"><strong>{p.area}</strong> <br />sqm</p></div>
-                        </div>
-                      </div>
-                      <div className="row mb-3" style={{ fontSize: 20, color: 'black' }}>${' '}{p.price}</div>
-                      <div className="row">
-                        <p>{p.address}{', '}{p.city}{', '}{p.province}</p>
-                      </div>
-                    </div>
-
-                  </div>
-                </div>
-              </Link>
-            </div>
-
-          </React.Fragment>
-        );
-      });
-
-    // var items = this.props.properties.items
-    //   .filter(p => {
-    //     return p.price <= this.state.maxPrice && p.price >= this.state.minPrice;
-    //   })
-    //   .filter(p => {
-    //     return p.numOfBedrooms >= this.state.bedroom;
-    //   })
-    //   .filter(p => {
-    //     return p.numOfBathrooms >= this.state.bathroom;
-    //   })
-    //   .filter(p => {
-    //     return p.area <= this.state.maxArea && p.area >= this.state.minArea;
-    //   })
-    //   .filter(p => {
-    //     if (!this.state.direction) {
-    //       return p;
-    //     }
-    //     return p.direction === this.state.direction;
-    //   })
-     
+        </React.Fragment>
+      );
+    });
     
-      
-    //   console.log(items)
-    console.log(this.props.properties)
-    if(this.props.properties.length ===0) return null
+    const pageNumbers = [];
+    for (let i =1;i <= Math.ceil(this.props.properties.items.length/this.state.itemsPerPage);i++){
+      pageNumbers.push(i)
+    }
+    const renderPageNumbers = pageNumbers.map(number => {
+      return (
+        <button
+          key={number}
+          id={number}
+          onClick={this.onClickPageNumber}
+        >
+          {number}
+        </button>
+      );
+    });
+    console.log(pageNumbers, this.state.currentPage)
     return (
       
       <SearchResultsWrapper>
@@ -421,11 +405,20 @@ class Test extends Component {
 
         </div>
         <div>
-          {this.state.pageOfItems.map(item =>
-            <div key={item.id}>{item.name}</div>
+          {/* {this.state.pageOfItems.filter(p => p.price <=this.state.maxPrice).map(item =>
+            <div key={item._id}>{item.price}</div>
           )}
-          <JwPagination items={this.props.properties} onChangePage={this.onChangePage} />
+          <JwPagination items={this.props.properties.items} onChangePage={this.onChangePage} pageSize={3} /> */}
+        
         </div>
+              <div className="row margin">
+          {this.state.isList ? renderCurrentItemsList : renderCurrentItemsGrid}
+
+              </div>
+             
+            <ul id="page-numbers text-center">
+              {renderPageNumbers}
+            </ul>
         
         <ScrollUp />
         <Footer />
@@ -433,7 +426,11 @@ class Test extends Component {
     );
   }
 }
-
+function searchingFor(min,max) {
+  return function (p) {
+    return (p.price <= max && p.price >= min);
+  };
+}
 const SearchResultsWrapper = styled.div`
 .img-grid{}
 .vl {

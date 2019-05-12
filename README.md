@@ -70,8 +70,7 @@ With the exception of Property and Project APIs GET endpoints, all other endpoin
  - jsonwebtoken
 
  ### Assumptions
- - Most users who want to purchase real estate already have a location in mind. No need to display all advertisements in the website. Instead, I provide a search bar and a filter where users can enter their desired location and get the relevant results they want.
-- When creating an ad, post date and expiration date (90 days after post date) is automatically recorded by the database.
+- When creating an ad, post date and expiration date (90 days after post date) is automatically determined recorded by the database.
 
 ### Report
 - I used a token-based authentication system for this project which is provided by a library called jsonwebtoken. This library is chosen because it is powerful and relatively easy to use. 

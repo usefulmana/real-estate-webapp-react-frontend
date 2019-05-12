@@ -9,14 +9,14 @@ import {
   UPDATE_PROPERTY
 } from './types';
 import axios from 'axios';
-import { 
+import {
   getAllPropertiesAPI,
   getPropertiesByAddressAPI,
   getPropertyByIdAPI,
   addAPropertyAPI,
   updateAPropertyAPI,
   deleteAPropertyAPI
- } from './../data/apiroutes';
+} from './../data/apiroutes';
 export function getProperties() {
   return function(dispatch) {
     console.log('property');
@@ -44,10 +44,9 @@ export function getPropertiesByUserID(id) {
 }
 export function getPropertiesByID(id) {
   return function(dispatch) {
-
-    fetch(getPropertyByIdAPI +`/${id}`)
+    fetch(getPropertyByIdAPI + `/${id}`)
       .then(res => res.json())
-      .then(property=>
+      .then(property =>
         dispatch({
           type: GET_PROPERTY_BY_ID,
           payload: property
@@ -57,15 +56,25 @@ export function getPropertiesByID(id) {
 }
 export function getPropertiesByAddress(address) {
   return function(dispatch) {
-    
-    fetch(`${getPropertiesByAddressAPI}/${address}`)
-      .then(res => res.json())
-      .then(property=>
-        dispatch({
-          type: GET_PROPERTIES_BY_ADDRESS,
-          payload: property
-        })
-      );
+    if (address == undefined) {
+      fetch(`${getPropertiesByAddressAPI}/`)
+        .then(res => res.json())
+        .then(property =>
+          dispatch({
+            type: GET_PROPERTIES_BY_ADDRESS,
+            payload: property
+          })
+        );
+    } else {
+      fetch(`${getPropertiesByAddressAPI}/${address}`)
+        .then(res => res.json())
+        .then(property =>
+          dispatch({
+            type: GET_PROPERTIES_BY_ADDRESS,
+            payload: property
+          })
+        );
+    }
   };
 }
 export function getPropertiesByProjectID(id) {
@@ -81,7 +90,6 @@ export function getPropertiesByProjectID(id) {
   };
 }
 export const createProperty = (propertyData, token) => dispatch => {
-  
   fetch(addAPropertyAPI, {
     method: 'POST',
     headers: {
@@ -115,8 +123,8 @@ export const deleteProperty = (pid, uid) => dispatch => {
     )
     .catch(err => console.log(err));
 };
-export const updateProperty = (
- { title,
+export const updateProperty = ({
+  title,
   price,
   area,
   numOfBedrooms,
@@ -128,8 +136,8 @@ export const updateProperty = (
   project,
   imageURL,
   token,
-  id}
-) => dispatch => {
+  id
+}) => dispatch => {
   const config = {
     headers: {
       'x-auth-token': token,
