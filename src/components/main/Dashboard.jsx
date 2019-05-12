@@ -11,11 +11,11 @@ class Dashboard extends Component {
     window.scrollTo(0, 0)
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if(this.props.auth.isAuthenticated == true && prevProps.auth.isAuthenticated == false){
-      window.location.reload()
-    }
-  }
+  // componentDidUpdate(prevProps, prevState) {
+  //   if(this.props.auth.isAuthenticated == true && prevProps.auth.isAuthenticated == false){
+  //     window.location.reload()
+  //   }
+  // }
   render() {
     return (
       <DashboardWrapper>

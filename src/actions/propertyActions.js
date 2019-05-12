@@ -19,7 +19,6 @@ import {
 } from './../data/apiroutes';
 export function getProperties() {
   return function(dispatch) {
-    console.log('property');
     fetch(getAllPropertiesAPI)
       .then(res => res.json())
       .then(properties =>

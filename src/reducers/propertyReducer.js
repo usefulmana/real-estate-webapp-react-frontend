@@ -2,6 +2,7 @@ import {
   GET_PROPERTIES,
   ADD_PROPERTY,
   GET_PROPERTIES_BY_USER_ID,
+  GET_PROPERTIES_BY_PROJECT_ID,
   GET_PROPERTY_BY_ID,
   GET_PROPERTIES_BY_ADDRESS,
   DELETE_PROPERTY,
@@ -10,7 +11,8 @@ import {
 
 const initialState = {
   items: [],
-  item: {}
+  item: {},
+  itemsProjectID: []
 };
 export default function(state = initialState, action) {
   switch (action.type) {
@@ -28,6 +30,11 @@ export default function(state = initialState, action) {
       return {
         ...state,
         items: action.payload
+      };
+    case GET_PROPERTIES_BY_PROJECT_ID:
+      return {
+        ...state,
+        itemsProjectID: action.payload
       };
     case GET_PROPERTY_BY_ID:
       return {

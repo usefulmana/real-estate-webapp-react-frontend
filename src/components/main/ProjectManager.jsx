@@ -12,6 +12,8 @@ import EditProject from "../secondary/EditProject";
 import { getUserInfoByTokenAPI } from "../../data/apiroutes";
 import JwPagination from 'jw-react-pagination'
 
+import ProjectDetail from './ProjectDetail';
+
 class ProjectManager extends Component {
   constructor() {
     super();
@@ -79,18 +81,13 @@ class ProjectManager extends Component {
                 <td>
                   <div className="d-inline-block">
                     <EditProject project={p} />
+                    
                   </div>
-                  {"     "}
-                  <Button
-                    outline
-                    color="info"
-                    size="sm"
-                    data-toggle="tooltip"
-                    title="View all properties belong to this project"
-                  >
-                    <i class="fas fa-info-circle" />
-                  </Button>{" "}
-                  {"     "}
+                  {' '}
+                  <div className="d-inline-block">
+                    <ProjectDetail project={p} />
+                  </div>
+                  {' '}
                   <Button
                     outline
                     color="danger"
