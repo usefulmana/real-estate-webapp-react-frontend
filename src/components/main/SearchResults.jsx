@@ -386,7 +386,11 @@ onClickPageNumber(e){
             </div>
           </div>
         </div>
+        
             {this.state.filterOn ? filter():null}
+        <div className='text-muted mt-3 text-center'>
+          {this.props.match.params.query === undefined ? 'Displaying results for: all' : `Displaying results for: ${this.props.match.params.query}`}
+        </div>
         <div className="row margin mt-5">
               
           {this.state.isGrid ? renderCurrentItemsGrid : renderCurrentItemsList}
@@ -406,6 +410,14 @@ onClickPageNumber(e){
 }
 
 const SearchResultsWrapper = styled.div`
+.btn-outline-danger{
+  border-color:  #f93838 !important;
+  color:  #f93838 !important;
+}
+.btn-outline-danger:hover{
+  background-color:  #f93838 !important;
+  color:  white !important;
+}
 .vl {
  margin-right:1rem;
   border-left: 1px solid #6C757D;
