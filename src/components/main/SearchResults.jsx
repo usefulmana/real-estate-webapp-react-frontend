@@ -22,7 +22,7 @@ class SearchResults extends Component {
       table: "",
       filterOn: false,
       currentPage: 1,
-      itemsPerPage: 6
+      itemsPerPage: 8
     };
     this.onChange = this.onChange.bind(this);
     this.onClickGrid = this.onClickGrid.bind(this);
@@ -345,7 +345,7 @@ onClickPageNumber(e){
     const renderPageNumbers = pageNumbers.map(number => {
       return (
         <button
-          className='page-btn btn btn-outline-danger'
+          className='page-btn btn btn-outline-danger mr-1'
           key={number}
           id={number}
           onClick={this.onClickPageNumber}
