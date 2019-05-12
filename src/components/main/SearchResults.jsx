@@ -345,7 +345,7 @@ onClickPageNumber(e){
     const renderPageNumbers = pageNumbers.map(number => {
       return (
         <button
-          className='page-btn btn btn-outline-danger mr-1'
+          className='page-btn btn page-number mr-1'
           key={number}
           id={number}
           onClick={this.onClickPageNumber}
@@ -410,11 +410,11 @@ onClickPageNumber(e){
 }
 
 const SearchResultsWrapper = styled.div`
-.btn-outline-danger{
+.page-number{
   border-color:  #f93838 !important;
   color:  #f93838 !important;
 }
-.btn-outline-danger:hover{
+.page-number:hover{
   background-color:  #f93838 !important;
   color:  white !important;
 }
