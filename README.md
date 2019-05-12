@@ -12,6 +12,12 @@ Repository: [Github](https://github.com/usefulmana/real-estate-webapp-react-fron
 - Database: MongoDB Atlas
 - React application: Heroku
 
+
+### To Start Locally <br>
+- This project is divided into two folders one for front-end and one for back end.
+- Install packages on each folder by using **npm install**
+- Start each folder by entering **npm start**
+
 ### Pre-made User Accounts <br>
 
 |  Email | Password  |
@@ -59,7 +65,7 @@ With the exception of Property and Project APIs GET endpoints, all other endpoin
 | POST  | https://express-estate.herokuapp.com/auth  | Login Authentication  | 
 | PUT | https://express-estate.herokuapp.com/user/id  | Update a user's information  | 
 
-### Dependencies
+### Dependencies <br>
  - bcrypt
  - body-parser
  - config
@@ -69,10 +75,10 @@ With the exception of Property and Project APIs GET endpoints, all other endpoin
  - mongoose
  - jsonwebtoken
 
- ### Assumptions
+ ### Assumptions <br>
 - When creating an ad, post date and expiration date (90 days after post date) is automatically determined recorded by the database.
 
-### Report
+### Report <br>
 - I used a token-based authentication system for this project which is provided by a library called jsonwebtoken. This library is chosen because it is powerful and relatively easy to use. 
 - Each user upon login or register will be granted a token which will be stored in session storage for security reason. When logging out or closing the tab, the token will be deleted.
 - Each user can only CRUD their own ads and projects.
