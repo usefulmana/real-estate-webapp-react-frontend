@@ -13,11 +13,6 @@ Repository: [Github](https://github.com/usefulmana/real-estate-webapp-react-fron
 - React application: Heroku
 
 
-### To Start Locally <br>
-- This project is divided into two folders one for front-end and one for back end.
-- Install packages on each folder by using **npm install**
-- Start each folder by entering **npm start**
-
 ### Pre-made User Accounts <br>
 
 |  Email | Password  |

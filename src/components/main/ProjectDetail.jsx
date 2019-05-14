@@ -50,14 +50,14 @@ export default class ProjectDetail extends Component {
           <ModalBody>
             <div className="row">
               {this.state.properties.map(p =>
-                <div className="col-3">
+                <div className="col-4">
                   <Link
                     to={`/propertyDetails/${p._id}`}
                     style={{ textDecoration: "none" }}
                   >
                     <div class="card text-dark property-card">
-                      {p.imageURL.length === 0 ? <img class="card-img-top img-grid" src='http://www.cbkhardware.com/pub/media/catalog/product/placeholder/default/noimage-1.png' alt="Card image cap" />
-                        : <img class="card-img-top img-grid" src={p.imageURL[0]} alt="Card image cap" />}
+                      {p.imageURL.length === 0 ? <img class="card-img-top img-grid"  width="300px"  height="200px" src='http://www.cbkhardware.com/pub/media/catalog/product/placeholder/default/noimage-1.png' alt="Card image cap" />
+                        : <img class="card-img-top img-grid" src={p.imageURL[0]} alt="Card image cap" width="300px" height="200px"/>}
                       <div class="card-body">
                         <h5 class="card-title">{p.title}</h5>
                         <p class="card-text">${p.price}</p>

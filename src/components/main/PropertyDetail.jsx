@@ -36,9 +36,13 @@ class PropertyDetail extends Component {
       return(
         <React.Fragment>
           <div className="carousel-item active">
-            <img class="d-inline-block w-100 h-100 "
+            <img class="d-inline-block "
               src={this.props.property.item.imageURL[0]}
-              alt="First slide"></img>
+              alt="First slide"
+              width="1000px" 
+              height="700px">
+                
+              </img>
           </div>
           {this.props.property.item.imageURL.slice(1).map(url => {
             return (
